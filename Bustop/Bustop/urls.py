@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from Bustop.view import prueba, login
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('prueba/', prueba),
+    path('login/', login),
 ]

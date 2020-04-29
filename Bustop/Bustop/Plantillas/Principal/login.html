@@ -1,0 +1,48 @@
+{% extends "Principal/padrePrincipal.html" %}
+{% load static %}
+
+{% block tittle %}
+Login
+{% endblock %}
+
+{% block content %}
+<div style="background-color: #216583;">
+    <div class="container">
+        <div class="img">
+            <img src="{% static 'Img/bus2.png' %}" style="width: 70%;">
+        </div>
+        <div class="login-content">
+            <form action="" method="post">
+
+                <img src="{% static 'Img/bus.png' %}" style="width: 40%; height: 70%;">
+                <br>
+                <h3 class="title" style="color: #f6eedf!important; font-family: 'Lobster', cursive;">Bienvenido!</h3>
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Usuario</h5>
+                        <input type="text" class="input" name="nombreusuario">
+                    </div>
+                </div>
+                <div class="input-div pass">
+                    <div class="i">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Contraseña</h5>
+                        <input type="password" class="input" name="contrausuario">
+                    </div>
+                </div>
+                <a id="a3" href="#">Olvide la contraseña.</a>
+                <input type="submit" class="btn" value="Login">
+                <a id="a2" href="#">No tienes cuenta? Registrate!</a>
+
+            </form>
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}
