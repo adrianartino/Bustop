@@ -15,10 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from Bustop.view import prueba, login
+from Bustop.view import prueba, login, registro, olvido, principalUsuario, buscarRuta, ubicacionRuta, mapaRutaGomez, mapaRutaTorreon, mapaRutaLerdo, quejaUsuario
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('prueba/', prueba),
     path('login/', login),
+    path('registro/', registro),
+    path('olvido/', olvido),
+    path('principalUsuario/', principalUsuario),
+    path('buscarRuta/', buscarRuta),
+    path('ubicacionRuta/', ubicacionRuta),
+    path('mapaRutaGomez/', mapaRutaGomez),
+    path('mapaRutaTorreon/', mapaRutaTorreon),
+    path('mapaRutaLerdo/', mapaRutaLerdo),
+    path('quejaUsuario/', quejaUsuario),
 ]

@@ -1,0 +1,116 @@
+{% extends "Principal/padrePrincipal.html" %}
+{% load static %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'Css/registro.css' %}">
+{% endblock %}
+
+{% block tittle %}
+Login
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="img">
+            <img src="{% static 'Img/bus2.png' %}" style="width: 70%;">
+        </div>
+        <div class="login-content">
+            <form action="" method="post">
+
+                <h3 class="title" style="color: #f6eedf!important; font-family: 'Lobster', cursive;">Registrate!</h3>
+                
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="div">
+                        <input class="juanito" type="text" class="input" name="nombreusuario"
+                         placeholder="Nombre Usuario" style="color: white;">
+                    </div>
+                </div>
+
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-pen"></i>
+                    </div>
+                    <div class="div">
+                        <input class="juanito" type="text" class="input" name="nombre"
+                            placeholder="Nombre(s)" style="color: white;">
+                    </div>
+                </div>
+
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-pen"></i>
+                    </div>
+                    <div class="div">
+                        <input class="juanito" type="text" class="input" name="apellido"
+                            placeholder="Apellido(s)" style="color: white;">
+                    </div>
+                </div>
+                <div class="input-div pass">
+                    <div class="i">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="div">
+                        <input class="juanito" type="text" class="input" name="contra"
+                            placeholder="Contraseña" style="color: white;">
+                    </div>
+                </div>
+                <div class="input-div pass">
+                    <div class="i">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="div">
+                        <input class="juanito" type="text" class="input" name="contraconfirmada"
+                            placeholder="Confirmar Contraseña" style="color: white;">
+                    </div>
+                </div>
+
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="div">
+                        <select class="form-control titulo">
+                            <option disabled selected>Localidad</option>
+                            <option value="gomez">Gómez Palacio</option>
+                            <option value="Lerdo">Lerdo</option>
+                            <option value="trc">Torreón</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-at"></i>
+                    </div>
+                    <div class="div">
+                        <input class="juanito" type="text" class="input" name="correo"
+                            placeholder="Correo Electrónico" style="color: white;">
+                    </div>
+                </div>
+
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-birthday-cake"></i>
+                    </div>
+                    <div class="div">
+                           <input type="date" id="start" name="trip-start" value="fecha1" min="1960-01-01"
+                               max="2020-04-29">
+                    </div>
+                </div>
+
+                <input type="submit" class="btn" value="Registrarse">
+                <a id="a2" href="#">Regresar a Login!</a>
+                
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+
+{% endblock %}

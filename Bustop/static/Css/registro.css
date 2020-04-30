@@ -18,8 +18,8 @@ body {
 }
 
 .container {
-    width: 100vw;
-    height: 100vh;
+    width: auto;
+    height: auto;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 7rem;
@@ -32,6 +32,10 @@ body {
     align-items: center;
 }
 
+#pinchediv
+{
+    height: 200%;
+}
 .login-content {
     display: flex;
     justify-content: flex-start;
@@ -62,8 +66,7 @@ form {
     position: relative;
     display: grid;
     grid-template-columns: 7% 93%;
-    margin: 25px 0;
-    padding: 5px 0;
+    padding: 6px 0;
     border-bottom: 3px solid #f57b51;
 }
 
@@ -122,7 +125,7 @@ form {
 }
 
 .input-div.focus>div>h5 {
-    top: -5px;
+    top: 0px;
     font-size: 15px;
 }
 
@@ -255,17 +258,20 @@ a:hover {
     color: crimson;
 }
 
-#nav
-{
+#nav {
     background-color: #ffd5ab;
 }
 
-#anav
-{
+#anav {
     color: #b7472a;
 }
 
-#titlenav
-{
+#titlenav {
     color: #b7472a !important;
+}
+
+.juanito::placeholder
+{
+    color: white;
+    
 }

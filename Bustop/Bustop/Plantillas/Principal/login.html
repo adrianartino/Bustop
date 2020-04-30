@@ -1,13 +1,17 @@
 {% extends "Principal/padrePrincipal.html" %}
 {% load static %}
 
+{% block estilos %}
+    <link rel="stylesheet" href="{% static 'Css/padrePrincipal.css' %}">
+{% endblock %}
+
 {% block tittle %}
 Login
 {% endblock %}
 
 {% block content %}
-<div style="background-color: #216583;">
-    <div class="container">
+<div id="pinchediv"style="background-color: #216583;">
+    <div class="container" >
         <div class="img">
             <img src="{% static 'Img/bus2.png' %}" style="width: 70%;">
         </div>
@@ -40,9 +44,13 @@ Login
                 <a id="a2" href="#">No tienes cuenta? Registrate!</a>
 
             </form>
+            
         </div>
+        
     </div>
 
-
 </div>
+
+
+
 {% endblock %}

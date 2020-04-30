@@ -255,17 +255,19 @@ a:hover {
     color: crimson;
 }
 
-#nav
-{
+#nav {
     background-color: #ffd5ab;
 }
 
-#anav
-{
+#anav {
     color: #b7472a;
 }
 
-#titlenav
-{
+#titlenav {
     color: #b7472a !important;
+}
+
+.juanito::placeholder {
+    color: white;
+
 }
