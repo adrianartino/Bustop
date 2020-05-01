@@ -98,7 +98,6 @@ def actUsuario(request):
 
    return render(request, "Actualizar/actUsuario.html")
 
-
 def actCons(request):
 
    return render(request, "Actualizar/actCons.html")
