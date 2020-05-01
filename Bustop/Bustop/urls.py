@@ -15,8 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from Bustop.view import prueba, login, registro, olvido, principalUsuario, buscarRuta, ubicacionRuta, mapaRutaGomez, mapaRutaTorreon, mapaRutaLerdo, quejaUsuario
-
+from Bustop.view import prueba, login, registro, olvido, principalUsuario, buscarRuta, ubicacionRuta, mapaRutaGomez, mapaRutaTorreon, mapaRutaLerdo, quejaUsuario, principalCons, infoCons, quejasCons, usuariosCons, principalAdmin, altaRuta, altaCons, actCons, actUsuario
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('prueba/', prueba),
@@ -30,4 +29,13 @@ urlpatterns = [
     path('mapaRutaTorreon/', mapaRutaTorreon),
     path('mapaRutaLerdo/', mapaRutaLerdo),
     path('quejaUsuario/', quejaUsuario),
+    path('principalCons/', principalCons),
+    path('infoCons/', infoCons),
+    path('quejasCons/', quejasCons),
+    path('usuariosCons/', usuariosCons),
+    path('principalAdmin/', principalAdmin),
+    path('altaRuta/', altaRuta),
+    path('altaCons/', altaCons),
+    path('actUsuario/', actUsuario),
+    path('actCons/', actCons),
 ]

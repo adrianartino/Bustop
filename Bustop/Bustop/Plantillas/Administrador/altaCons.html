@@ -1,0 +1,98 @@
+{% extends "Administrador/padreAdmin.html" %}
+{% load static %}
+
+{% block estilos %}
+<link href="https://fonts.googleapis.com/css2?family=Marvel:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block tittle %}
+Login
+{% endblock %}
+
+{% block content %}
+<center>
+    <p style="font-family: 'Marvel', sans-serif; font-size: 70px;">Dar de alta Consesionario.</p>
+
+    <div class="row">
+
+        <div class="col-6">
+
+            <div class="row">
+                <div class="col-6">
+                    <label>Nombre de usuario Consesionario:</label>
+                </div>
+                <div class="col-6">
+                    <input class="form-control" type="text" placeholder="Consesionario123.">
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-6">
+                    <label>Contraseña:</label>
+                </div>
+                <div class="col-6">
+                    <input class="form-control" type="password" placeholder="blablabla">
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-6">
+                    <label>Nombre Completo Consesionario:</label>
+                </div>
+                <div class="col-6">
+                    <input class="form-control" type="text" placeholder="Juan Liendo Palafox.">
+                </div>
+            </div>
+            
+            <br>
+            <div class="row">
+                <div class="col-6">
+                    <label>Ruta Encargada:</label>
+                </div>
+                <div class="col-6">
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-primary dropdown-toggle"
+                            data-toggle="dropdown">Desplegable</button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-header">sección uno</div>
+                            <a href="#" class="dropdown-item">Enlace 1</a>
+                            <a href="#" class="dropdown-item">Enlace 2</a>
+                            <a href="#" class="dropdown-item">Enlace 3</a>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-header">sección dos</div>
+                            <a href="#" class="dropdown-item">Enlace 4</a>
+                            <a href="#" class="dropdown-item disabled">Enlace 5</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <br>
+            <div class="row">
+                <div class="col-6">
+                    <label>Correo Electrónico:</label>
+                </div>
+                <div class="col-6">
+                    <input class="form-control" type="text" placeholder="Ej. consesionario@gmail.com">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-6">
+            <div class="img">
+                <img src="{% static 'Img/bus2.png' %}" style="width: 55%;">
+            </div>
+        </div>
+    </div>
+    <br>
+    <button class="btn btn-primary" id="menu-toggle" style="background-color: #f8b400 ; border: none;">Dar de alta
+        Consesionario</button>
+    <br><br>
+
+
+</center>
+
+{% endblock %}

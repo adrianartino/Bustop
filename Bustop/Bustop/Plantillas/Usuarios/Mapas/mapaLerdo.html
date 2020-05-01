@@ -1,0 +1,51 @@
+{% extends "Usuarios/usuariosPadre.html" %}
+{% load static %}
+
+{% block estilos %}
+<link href="https://fonts.googleapis.com/css2?family=Marvel:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block tittle %}
+Login
+{% endblock %}
+
+{% block content %}
+<center>
+    <p style="font-family: 'Marvel', sans-serif; font-size: 70px;">MAPA DE RUTAS DE LERDO.</p>
+
+    <div class="row">
+
+        <div class="col-3">
+            <div class="text-left">
+                <label><i class="fas fa-clock"></i> Lista de rutas de Gómez Palacio:</label>
+
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <a href="#">Hamburgo.</a>
+                    </li>
+
+                    <li class="list-group-item">
+                        <a href="#">Directo.</a>
+                    </li>
+
+                    <li class="list-group-item">
+                        <a href="#">Cereso.</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="col-9">
+            <iframe src="https://www.google.com/maps/d/u/0/embed?mid=19rClhNRjw8oEd5Hbs0-3HS2uXK2k2m_p" width="640"
+                height="480"></iframe>
+        </div>
+    </div>
+
+
+
+
+</center>
+
+{% endblock %}

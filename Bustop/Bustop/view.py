@@ -61,3 +61,45 @@ def quejaUsuario(request):
    return render(request, "Usuarios/quejaUsuario.html")
 
 
+#CONSESIONARIOS ----------------------------------------------------------------------------------------------
+def principalCons(request):
+
+   return render(request, "Consesionario/bienCons.html")
+
+def infoCons(request):
+
+   return render(request, "Consesionario/infoCons.html")
+
+def quejasCons(request):
+
+   return render(request, "Consesionario/quejasCons.html")
+
+def usuariosCons(request):
+
+   return render(request, "Consesionario/usuariosCons.html")
+
+
+#ADMINISTRADORES ----------------------------------------------------------------------------------------------
+def principalAdmin(request):
+
+   return render(request, "Administrador/bienAdmin.html")
+
+def altaRuta(request):
+
+   return render(request, "Administrador/altaRuta.html")
+
+def altaCons(request):
+
+   return render(request, "Administrador/altaCons.html")
+
+
+#ACTUALIZAR DATOS ----------------------------------------------------------------------------------------------
+def actUsuario(request):
+
+   return render(request, "Actualizar/actUsuario.html")
+
+
+def actCons(request):
+
+   return render(request, "Actualizar/actCons.html")
+

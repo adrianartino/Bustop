@@ -1,0 +1,89 @@
+{% extends "Administrador/padreAdmin.html" %}
+{% load static %}
+
+{% block estilos %}
+<link href="https://fonts.googleapis.com/css2?family=Marvel:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block tittle %}
+Login
+{% endblock %}
+
+{% block content %}
+<center>
+    <p style="font-family: 'Marvel', sans-serif; font-size: 70px;">Dar de alta ruta.</p>
+
+    <div class="row">
+
+        <div class="col-6">
+
+            <div class="row">
+                <div class="col-6">
+                    <label>Nombre de Ruta:</label>
+                </div>
+                <div class="col-6">
+                    <input class="form-control" type="text" placeholder="Hamburgo." >
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-6">
+                    <label>Número de camiones:</label>
+                </div>
+                <div class="col-6">
+                    <input class="form-control" type="text" placeholder="40." >
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-6">
+                    <label>Color de la ruta:</label>
+                </div>
+                <div class="col-6">
+                    <input class="form-control" type="text" placeholder="Verde." >
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-6">
+                    <p style="font-family: 'Marvel', sans-serif; font-size: 20px;">Agregar imágen de Camión.</p>
+                </div>
+                <div class="col-6">
+
+                    <div class="image-upload">
+                        <label for="file-input">
+                            <img src="http://files.softicons.com/download/toolbar-icons/mono-general-icons-3-by-custom-icon-design/png/256x256/camera.png"
+                                alt="Click aquí para subir tu foto" title="Click aquí para subir tu foto"
+                                data-toggle="tooltip" data-placement="bottom" title="Clic aquí para subir la foto!" style="width: 15%;">
+                                <input id="file-input" name="foto" type="file">
+                            </label>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-6">
+                    <p style="font-family: 'Marvel', sans-serif; font-size: 20px;">Tiempos aproximados en minutos.</p>
+                </div>
+                <div class="col-6">
+                    <input type="number" name="edad" placeholder="0 Minutos">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-6">
+            <div class="img">
+                <img src="{% static 'Img/bus2.png' %}" style="width: 55%;">
+            </div>
+        </div>
+    </div>
+    <br>
+    <button class="btn btn-primary" id="menu-toggle" style="background-color: #f8b400 ; border: none;">Dar de alta ruta</button>
+    <br><br>
+
+
+</center>
+
+{% endblock %}
