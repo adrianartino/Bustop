@@ -15,10 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from Bustop.view import prueba, login, registro, olvido, principalUsuario, buscarRuta, ubicacionRuta, mapaRutaGomez, mapaRutaTorreon, mapaRutaLerdo, quejaUsuario, principalCons, infoCons, quejasCons, usuariosCons, principalAdmin, altaRuta, altaCons, actCons, actUsuario
+from Bustop.view import  login, registro, olvido, principalUsuario, buscarRuta, ubicacionRuta, mapaRutaGomez, mapaRutaTorreon, mapaRutaLerdo, quejaUsuario, principalCons, infoCons, quejasCons, usuariosCons, principalAdmin, altaRuta, altaCons, actCons, actUsuario
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('prueba/', prueba),
     path('login/', login),
     path('registro/', registro),
     path('olvido/', olvido),
