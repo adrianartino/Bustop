@@ -3,18 +3,11 @@ from django.template import Template, Context
 from django.template.loader import get_template
 from django.shortcuts import render
 
-def prueba(request):
-
-    persona = "Gabriel es puto"
-
-    return render(request, "Principal/padrePrincipal.html", {"variable": persona})
 
 #LOGIN
 def login(request):
 
-    persona = "Gabriel es puto"
-    
-    return render(request, "Principal/login.html", {"variable": persona})
+    return render(request, "Principal/login.html")
 
 def registro(request):
 
