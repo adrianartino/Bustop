@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'appBustop',
 ]
 
 MIDDLEWARE = [
@@ -75,8 +76,12 @@ WSGI_APPLICATION = 'Bustop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'rsjhzwer',
+        'USER': 'rsjhzwer',
+        'PASSWORD': 'Lgx85Lo1OMGfp4Pzm8gpZ1utg0cBwo5i',
+        'HOST': 'otto.db.elephantsql.com',
+        'PORT': '5432'
     }
 }
 

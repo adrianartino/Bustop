@@ -15,26 +15,27 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from Bustop.view import  login, registro, olvido, principalUsuario, buscarRuta, ubicacionRuta, mapaRutaGomez, mapaRutaTorreon, mapaRutaLerdo, quejaUsuario, principalCons, infoCons, quejasCons, usuariosCons, principalAdmin, altaRuta, altaCons, actCons, actUsuario
+from appBustop import views
+# login, registro, olvido, principalUsuario, buscarRuta, ubicacionRuta, mapaRutaGomez, mapaRutaTorreon, mapaRutaLerdo, quejaUsuario, principalCons, infoCons, quejasCons, usuariosCons, principalAdmin, altaRuta, altaCons, actCons, actUsuario
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', login),
-    path('registro/', registro),
-    path('olvido/', olvido),
-    path('principalUsuario/', principalUsuario),
-    path('buscarRuta/', buscarRuta),
-    path('ubicacionRuta/', ubicacionRuta),
-    path('mapaRutaGomez/', mapaRutaGomez),
-    path('mapaRutaTorreon/', mapaRutaTorreon),
-    path('mapaRutaLerdo/', mapaRutaLerdo),
-    path('quejaUsuario/', quejaUsuario),
-    path('principalCons/', principalCons),
-    path('infoCons/', infoCons),
-    path('quejasCons/', quejasCons),
-    path('usuariosCons/', usuariosCons),
-    path('principalAdmin/', principalAdmin),
-    path('altaRuta/', altaRuta),
-    path('altaCons/', altaCons),
-    path('actUsuario/', actUsuario),
-    path('actCons/', actCons),
+    path('login/', views.login),
+    path('registro/', views.registro),
+    path('olvido/', views.olvido),
+    path('principalUsuario/', views.principalUsuario),
+    path('buscarRuta/', views.buscarRuta),
+    path('ubicacionRuta/', views.ubicacionRuta),
+    path('mapaRutaGomez/', views.mapaRutaGomez),
+    path('mapaRutaTorreon/', views.mapaRutaTorreon),
+    path('mapaRutaLerdo/', views.mapaRutaLerdo),
+    path('quejaUsuario/', views.quejaUsuario),
+    path('principalCons/', views.principalCons),
+    path('infoCons/', views.infoCons),
+    path('quejasCons/', views.quejasCons),
+    path('usuariosCons/', views.usuariosCons),
+    path('principalAdmin/', views.principalAdmin),
+    path('altaRuta/', views.altaRuta),
+    path('altaCons/', views.altaCons),
+    path('actUsuario/', views.actUsuario),
+    path('actCons/', views.actCons),
 ]
