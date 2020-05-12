@@ -8,7 +8,8 @@ class Usuarios(models.Model):
     contrasena = models.CharField(max_length=30)
     localidad = models.CharField(max_length=30)
     correo = models.CharField(max_length=30)
-    nacimiento = models.CharField(max_length=20)
+    nacimiento = models.DateField()
+
 
 class Rutas(models.Model):
     nombre_ruta = models.CharField(max_length=20, primary_key=True)
