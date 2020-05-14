@@ -2,7 +2,16 @@ from django.http import HttpResponse
 from django.template import Template, Context
 from django.template.loader import get_template
 from django.shortcuts import render
+from django.shortcuts import redirect
+
+#importar lo del email
+from django.conf import settings
+from django.core.mail import send_mail
+
+#importar modelos
 from appBustop.models import Usuarios
+
+
 
 # Create your views here.
 
@@ -10,8 +19,62 @@ from appBustop.models import Usuarios
 
 def login(request):
 
-    return render(request, "Principal/login.html")
+   #si hay una sesion iniciada...
+   if "sesion" in request.session:
+      return redirect('/principalUsuario/')
+   
+   else:
+      if request.method == "POST":
+         
+         nombreusuario = request.POST['nombreusuario']
+         contra = request.POST['contrausuario']
 
+         datospersona = Usuarios.objects.filter(usuario__icontains=nombreusuario)
+
+         #Si encuentra a una persona con ese usuario
+         if datospersona :
+
+            for dato in datospersona:
+               contrareal = dato.contrasena
+               nombre = dato.nombre
+               apellido = dato.apellido
+               localidad = dato.localidad
+               correo = dato.correo
+               nacimiento = dato.nacimiento
+            
+            #Si ingresa bien su usuario y contraseña
+            if contra == contrareal:
+
+               request.session['sesion'] = nombreusuario
+               request.session['nombre'] = nombre
+               request.session['apellido'] = apellido
+               return redirect('/principalUsuario/')
+
+            #Contraseña esta mal
+            else:
+               bandera = True
+               bandera2 = True
+               error = "Ha ingresado mal la contraseña."
+               return render(request, "Principal/login.html", {"bandera": bandera, "bandera2": bandera2, "error": error, "nombreusuario": nombreusuario})
+               # return HttpResponse(mensaje)
+
+         #si no se encuentra a alguien con ese usuario..
+         else:
+            bandera = True
+            error = "No se ha encontrado a nadie con ese usuario."
+            return render(request, "Principal/login.html", {"bandera": bandera, "error": error})
+            # mensaje = "No se encontro alguien con ese usuario xd"
+            # return HttpResponse(mensaje)
+
+
+      return render(request, "Principal/login.html")
+
+def salir(request):
+   del request.session["sesion"]
+   del request.session['nombre']
+   del request.session['apellido'] 
+
+   return redirect('/login/')
 
 def registro(request):
 
@@ -77,52 +140,84 @@ def registro(request):
 
 def olvido(request):
 
-    return render(request, "Principal/olvidoContra.html")
+   #si se da clic en el boton..
+   if request.method == "POST":
+
+      nombreusuario = request.POST['nombreusuario']
+
+      datospersona = Usuarios.objects.filter(usuario__icontains=nombreusuario)
+
+      if datospersona:
+
+         for dato in datospersona:
+            nombre = dato.nombre
+            apellido = dato.apellido
+            correo = dato.correo
+            contraseña = dato.contrasena
+         
+         email_remitente = settings.EMAIL_HOST_USER
+         email_destino = [correo]
+         
+         asunto = "Recuperación de contraseña - Bustop"
+         mensaje = "Hola "+ nombre+ " "+ apellido+ ". Tu contraseña es: "+ contraseña+ "."
+
+         send_mail(asunto, mensaje, email_remitente, ["brandonmora850@gmail.com"])
+
+         return render(request, "Principal/olvidoContra.html", {"datospersona":datospersona,"busqueda":nombreusuario, "nombre":nombre, "apellido":apellido})
+
+      else:
+         error = "No se encontro el usuario."
+         bandera = True
+         return render(request, "Principal/olvidoContra.html", {"error": error, "bandera": bandera})
+      #return HttpResponse(datospersona)
+
+   
+   return render(request, "Principal/olvidoContra.html")
 
 #USUARIOS PRINCIPAL
 
 
 def principalUsuario(request):
 
-    return render(request, "Usuarios/bienUsuario.html")
+    return render(request, "Usuarios/bienUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido']})
 
 #BUSCAR RUTA
 
 
 def buscarRuta(request):
 
-   return render(request, "Usuarios/bRutaUsuario.html")
+   return render(request, "Usuarios/bRutaUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido']})
 
 #BUSCAR RUTA POS UBICACIÓN.
 
 
 def ubicacionRuta(request):
 
-   return render(request, "Usuarios/ubiUsuario.html")
+   return render(request, "Usuarios/ubiUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido']})
 
 #MAPAS
 
 
 def mapaRutaTorreon(request):
 
-   return render(request, "Usuarios/Mapas/mapaTorreon.html")
+   return render(request, "Usuarios/Mapas/mapaTorreon.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido']})
 
 
 def mapaRutaGomez(request):
 
-   return render(request, "Usuarios/Mapas/mapaGomez.html")
+   return render(request, "Usuarios/Mapas/mapaGomez.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido']})
 
 
 def mapaRutaLerdo(request):
 
-   return render(request, "Usuarios/Mapas/mapaLerdo.html")
+   return render(request, "Usuarios/Mapas/mapaLerdo.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido']})
 
 #QUEJAS Y SUGERENCIAS.
 
 
 def quejaUsuario(request):
 
-   return render(request, "Usuarios/quejaUsuario.html")
+   return render(request, "Usuarios/quejaUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido']})
 
 
 #CONSESIONARIOS ----------------------------------------------------------------------------------------------
@@ -165,7 +260,7 @@ def altaCons(request):
 #ACTUALIZAR DATOS ----------------------------------------------------------------------------------------------
 def actUsuario(request):
 
-   return render(request, "Actualizar/actUsuario.html")
+   return render(request, "Actualizar/actUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido']})
 
 
 def actCons(request):

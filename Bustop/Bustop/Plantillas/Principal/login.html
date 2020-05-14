@@ -16,7 +16,7 @@ Login
             <img src="{% static 'Img/bus2.png' %}" style="width: 70%;">
         </div>
         <div class="login-content">
-            <form action="" method="post">
+            <form action="/login/" method="post">{% csrf_token %}
 
                 <img src="{% static 'Img/bus.png' %}" style="width: 40%; height: 70%;">
                 <br>
@@ -26,8 +26,14 @@ Login
                         <i class="fas fa-user"></i>
                     </div>
                     <div class="div">
-                        <h5>Usuario</h5>
-                        <input type="text" class="input" name="nombreusuario">
+                        
+                        {% if bandera2 %}
+                        <input type="text" class="input" name="nombreusuario" value="{{nombreusuario}}"
+                            placeholder="Usuario" >
+                        {% else %}
+                        <input type="text" id = "inputculo" class="input" name="nombreusuario" placeholder="Usuario"
+                            >
+                        {% endif %}
                     </div>
                 </div>
                 <div class="input-div pass">
@@ -51,6 +57,26 @@ Login
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
+
+{% if bandera %}
+<script type="text/javascript">
+    Swal.fire({
+        icon: 'error',
+        title: 'Algo salio mal..',
+        text: ' {{error}}',
+        footer: '<span style="color: red!important"> Corrige tus datos para ingresar a Bustop! </span>',
+        width: '40%'
+    });
+</script>
+{% endif %}
+
+<!--Funciòn toogle-->
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
 
 {% endblock %}

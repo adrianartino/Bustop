@@ -37,7 +37,7 @@
         <div class="bg-light border-right" id="sidebar-wrapper">
 
             <div class="sidebar-heading text-center font-weight-bold" style="background-color: #585B5E!important; 
-              color: #f8b400;"> Nombre de usuario </div>
+              color: #f8b400;"> Usuario: {{nombreusuario}} </div>
             <div style="background-color: #585B5E!important;">
                 <center>
                     <i class="fas fa-user-circle" style="font-size:80px; color: white;"></i>
@@ -45,12 +45,15 @@
                 </center>
             </div>
             <div class="list-group list-group-flush">
+                <a href="/principalUsuario/" id="b2" class="list-group-item list-group-item-action bg-light 
+        animated slideInUp ">
+                    <i class="fa fa-home " id="icono1"></i> Página Principal</a>
 
-                <a href="#" id="b2" class="list-group-item list-group-item-action bg-light 
+                <a href="/buscarRuta/" id="b2" class="list-group-item list-group-item-action bg-light 
         animated slideInUp ">
                     <i class="fa fa-search " id="icono1" ></i> Buscar Ruta</a>
 
-                <a href="#" id="b3"  class="list-group-item list-group-item-action bg-light
+                <a href="/ubicacionRuta/" id="b3" class="list-group-item list-group-item-action bg-light
         animated slideInUp ">
                     <i class="fas fa-map-marked-alt" id="icono2"></i> Buscar por ubicación</a>
 
@@ -63,23 +66,23 @@
                         ><i class="fas fa-bus" id="icono3"></i> Mapa de rutas</a>
                     <ul class="list-unstyled collapse" id="homeSubmenu" >
                         <li>
-                            <a href="#" id="b3" class="list-group-item list-group-item-action bg-light
+                            <a href="/mapaRutaTorreon/" id="b3" class="list-group-item list-group-item-action bg-light
                             animated slideInUp ">
                                 <i class="fas fa-map-marker-alt" id="icono2"></i> Torreón</a>
                         </li>
                         <li>
-                            <a href="#" id="b3" class="list-group-item list-group-item-action bg-light
+                            <a href="/mapaRutaGomez/" id="b3" class="list-group-item list-group-item-action bg-light
                             animated slideInUp ">
                                 <i class="fas fa-map-marker-alt" id="icono2"></i> Gómez Palacio</a>
                         </li>
                         <li>
-                            <a href="#" id="b3" class="list-group-item list-group-item-action bg-light
+                            <a href="/mapaRutaLerdo/" id="b3" class="list-group-item list-group-item-action bg-light
                             animated slideInUp ">
                                 <i class="fas fa-map-marker-alt" id="icono2"></i> Lerdo</a>
                         </li>
                     </ul>
 
-                <a href="#" id="b5"  class="list-group-item list-group-item-action bg-light
+                <a href="/quejaUsuario/" id="b5" class="list-group-item list-group-item-action bg-light
         animated slideInUp ">
                     <i class="fas fa-exclamation-circle" id="icono4" ></i> Realizar Queja</a>
             </div>
@@ -116,7 +119,7 @@
 
                         <li class="nav-item">
                             <a class="nav-link" style="color:white; font-family: 'Marvel', sans-serif; font-size: 18px;"
-                                href="https://twitter.com/cerati?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"
+                                href="/actUsuario/"
                                 data-toggle="tooltip" data-placement="bottom"
                                 title="Sigue la cuenta oficial de Cerati!">
                                 <i class="fas fa-wrench" style="font-size:22px"></i>
@@ -126,7 +129,7 @@
 
                         <li class="nav-item">
                             <a class="nav-link" style="color:white; font-family: 'Marvel', sans-serif; font-size: 18px;"
-                                href="https://open.spotify.com/artist/1QOmebWGB6FdFtW7Bo3F0W"
+                                href="/salir/"
                                 data-toggle="tooltip" data-placement="bottom" title="Escucha a Gustavo Cerati!">
                                 <i class="fas fa-sign-out-alt" style="font-size:20px"></i> Salir</a>
                         </li>

@@ -38,4 +38,5 @@ urlpatterns = [
     path('altaCons/', views.altaCons),
     path('actUsuario/', views.actUsuario),
     path('actCons/', views.actCons),
+    path('salir/', views.salir),
 ]

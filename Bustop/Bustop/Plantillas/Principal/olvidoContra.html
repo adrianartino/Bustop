@@ -15,7 +15,7 @@ Login
         <img src="{% static 'Img/bus2.png' %}" style="width: 70%;">
     </div>
     <div class="login-content">
-        <form action="" method="post">
+        <form action="/olvido/" method="POST"> {% csrf_token %}
 
             <h3 class="title" style="color: #f6eedf!important; font-family: 'Lobster', cursive;">Recuperar Contraseña!</h3>
 
@@ -25,30 +25,56 @@ Login
                 </div>
                 <div class="div">
                     <input class="juanito" type="text" class="input" name="nombreusuario" placeholder="Nombre Usuario"
-                        style="color: white;">
+                        style="color: white;"
+                        pattern="[A-Za-z0-9-_]{2,15}"
+                        title="Ingresa solo letras y numeros, mayor a 2 caracteres." required data-toggle="tooltip"
+                        data-placement="right">
                 </div>
             </div>
 
 
-            <div class="input-div one">
-                <div class="i">
-                    <i class="fas fa-at"></i>
-                </div>
-                <div class="div">
-                    <input class="juanito" type="text" class="input" name="correo" placeholder="Correo Electrónico"
-                        style="color: white;">
-                </div>
-            </div>
+            
 
 
             <input type="submit" class="btn" value="Recuperar Contraseña">
-            <a id="a2" href="#">Regresar a Login!</a>
+            <a id="a2" href="/login/">Regresar a Login!</a>
 
         </form>
 
     </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+{% if datospersona %}
+<script type="text/javascript">
+    Swal.fire({
+        icon: 'success',
+        title: 'Wuuuuuuju!',
+        text: '{{nombre}}, te hemos mandado tu contraseña a tu correo!',
+        width: '40%'
+    });
+    
+</script>
+{% endif %}
+{% if bandera %}
+<script type="text/javascript">
+    Swal.fire({
+        icon: 'error',
+        title: 'Algo salio mal..',
+        text: ' {{error}}',
+        footer: '<span style="color: red!important"> Corrige los datos para recuperar tu contraseña! </span>',
+        width: '40%'
+    });
+</script>
+{% endif %}
+
+<!--Funciòn toogle-->
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
 
 
 
