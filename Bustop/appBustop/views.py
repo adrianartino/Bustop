@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.template import Template, Context
 from django.template.loader import get_template
 from django.shortcuts import render
+from appBustop.models import Usuarios
 
 # Create your views here.
 
@@ -14,7 +15,64 @@ def login(request):
 
 def registro(request):
 
-    return render(request, "Principal/registro.html")
+   if request.method == "POST":
+      
+      nombreusuario = request.POST['nombreusuario']
+      nombre = request.POST['nombre']
+      apellido = request.POST['apellido']
+      contra = request.POST['contra']
+      cc = request.POST['contraconfirmada']
+      localidad = request.POST['localidad']
+      correo = request.POST['correo']
+      nacimiento = request.POST['nacimiento']
+   
+      textoerror = ""
+      error = False
+      error2 = False
+      error3 = False
+
+      if contra == cc:
+         error = False
+            
+      else:
+         error = True
+         textoerror += " Las contraseñas no coinciden. "
+
+
+         
+      if localidad == "l":
+         error2 = True
+         textoerror += " Selecciona una localidad. "
+      else:
+         error2 = False
+         
+
+
+      if nacimiento == "":
+         error3 = True
+         textoerror += " Falta ingresar la fecha de nacimiento. "
+      else:
+         error3 = False
+
+      #si hay un error
+      if error == True or error2 == True or error3 == True:
+         hayerror = True
+         return render(request, "Principal/registro.html", {"bandera":hayerror, "textoerror":textoerror, "nombreusuario":nombreusuario, "nombre":nombre, "apellido":apellido, "contra":contra, "cc":cc, "localidad":localidad, "correo":correo, "nacimiento":nacimiento})
+
+         #return HttpResponse(textoerror)
+      #si no hay errores
+      elif error == False:
+         hayerror = False
+
+         registro = Usuarios(usuario = nombreusuario, nombre = nombre, apellido = apellido, contrasena = contra, localidad = localidad, correo = correo, nacimiento = nacimiento)
+         registro.save()
+         return render(request, "Principal/registro.html", {"bandera": hayerror})
+         #datos = nombreusuario , " " , nombre , " " , apellido , " " , contra , " " , cc , " " , localidad , " " , correo , " " , nacimiento
+         #return HttpResponse(datos)
+      
+   
+   return render(request, "Principal/registro.html")
+
 
 
 def olvido(request):
