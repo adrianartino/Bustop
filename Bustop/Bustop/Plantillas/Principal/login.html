@@ -3,6 +3,7 @@
 
 {% block estilos %}
     <link rel="stylesheet" href="{% static 'Css/padrePrincipal.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
 {% endblock %}
 
 {% block tittle %}
@@ -12,7 +13,7 @@ Login
 {% block content %}
 <div id="pinchediv"style="background-color: #216583;">
     <div class="container" >
-        <div class="img">
+        <div class="img animate__animated animate__bounce">
             <img src="{% static 'Img/bus2.png' %}" style="width: 70%;">
         </div>
         <div class="login-content">
@@ -20,7 +21,8 @@ Login
 
                 <img src="{% static 'Img/bus.png' %}" style="width: 40%; height: 70%;">
                 <br>
-                <h3 class="title" style="color: #f6eedf!important; font-family: 'Lobster', cursive;">Bienvenido!</h3>
+                <h3 class="title animate__animated animate__jackInTheBox"
+                    style="color: #f6eedf!important; font-family: 'Lobster', cursive;">Bienvenido!</h3>
                 <div class="input-div one">
                     <div class="i">
                         <i class="fas fa-user"></i>
@@ -46,8 +48,8 @@ Login
                     </div>
                 </div>
                 <a id="a3" href="/olvido/">Olvide la contraseña.</a>
-                <input type="submit" class="btn" value="Login">
-                <a id="a2" href="/registro/">No tienes cuenta? Registrate!</a>
+                <input type="submit" class="btn animate__animated animate__slideInUp" value="Login">
+                <a class="animate__animated animate__fadeIn"  id="a2" href="/registro/">No tienes cuenta? Registrate!</a>
 
             </form>
             

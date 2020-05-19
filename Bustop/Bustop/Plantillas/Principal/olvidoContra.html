@@ -3,6 +3,7 @@
 
 {% block estilos %}
 <link rel="stylesheet" href="{% static 'Css/recuperarcontra.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
 {% endblock %}
 
 {% block tittle %}
@@ -17,7 +18,8 @@ Login
     <div class="login-content">
         <form action="/olvido/" method="POST"> {% csrf_token %}
 
-            <h3 class="title" style="color: #f6eedf!important; font-family: 'Lobster', cursive;">Recuperar Contraseña!</h3>
+            <h3 class="title animate__animated animate__jackInTheBox"
+                style="color: #f6eedf!important; font-family: 'Lobster', cursive;">Recuperar Contraseña!</h3>
 
             <div class="input-div one">
                 <div class="i">
@@ -36,8 +38,8 @@ Login
             
 
 
-            <input type="submit" class="btn" value="Recuperar Contraseña">
-            <a id="a2" href="/login/">Regresar a Login!</a>
+            <input type="submit" class="btn animate__animated animate__slideInUp" value="Recuperar Contraseña">
+            <a class="animate__animated animate__fadeIn" id="a2" href="/login/">Regresar a Login!</a>
 
         </form>
 
