@@ -24,7 +24,7 @@ Login
                         <label>Nombre:</label>
                     </div>
                     <div class="col-6">
-                        <input class="form-control" type="text" placeholder="Juan .">
+                        <input class="form-control" type="text" value="{{nusuario}}">
                     </div>
                 </div>
                 <br>
@@ -33,7 +33,7 @@ Login
                         <label>Apellido:</label>
                     </div>
                     <div class="col-6">
-                        <input class="form-control" type="text" placeholder="Liendo .">
+                        <input class="form-control" type="text" value="{{ausuario}}">
                     </div>
                 </div>
                 <br>
@@ -42,7 +42,7 @@ Login
                         <label>Contraseña:</label>
                     </div>
                     <div class="col-6">
-                        <input class="form-control" type="password" placeholder="Ingresa tu nueva contraseña.">
+                        <input class="form-control" type="password" value="{{cc}}">
                     </div>
                 </div>
                 <br>
@@ -53,12 +53,32 @@ Login
                     <div class="col-6">
                         <div class="input-div one">
                             <div class="div">
-                                <select class="form-control titulo">
-                                    <option disabled selected>Localidad</option>
-                                    <option value="gomez">Gómez Palacio</option>
-                                    <option value="Lerdo">Lerdo</option>
-                                    <option value="trc">Torreón</option>
-                                </select>
+                                 {% if lusuario == "Gomez Palacio" %}
+                                 <select class="form-control titulo" name="localidad">
+                                     <option value="l">Localidad</option>
+                                     <option selected value="Gomez Palacio">Gómez Palacio</option>
+                                     <option value="Lerdo">Lerdo</option>
+                                     <option value="Torreon">Torreón</option>
+                                 </select>
+                                 {% endif %}
+
+                                 {% if lusuario == "Lerdo" %}
+                                 <select class="form-control titulo" name="localidad">
+                                     <option value="l">Localidad</option>
+                                     <option value="Gomez Palacio">Gómez Palacio</option>
+                                     <option selected value="Lerdo">Lerdo</option>
+                                     <option value="Torreon">Torreón</option>
+                                 </select>
+                                 {% endif %}
+
+                                 {% if lusuario == "Torreon" %}
+                                 <select class="form-control titulo" name="localidad">
+                                     <option value="l">Localidad</option>
+                                     <option value="Gomez Palacio">Gómez Palacio</option>
+                                     <option value="Lerdo">Lerdo</option>
+                                     <option selected value="Torreon">Torreón</option>
+                                 </select>
+                                 {% endif %}
                             </div>
                         </div>
                     </div>
@@ -66,11 +86,11 @@ Login
 
                 <br>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-5">
                         <label>Correo Electrónico:</label>
                     </div>
-                    <div class="col-6">
-                        <input class="form-control" type="password" placeholder="Ingresa tu nueva contraseña.">
+                    <div class="col-7">
+                        <input class="form-control" type="password" value="{{cusuario}}">
                     </div>
                 </div>
 

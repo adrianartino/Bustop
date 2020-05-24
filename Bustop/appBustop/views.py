@@ -88,7 +88,19 @@ def registro(request):
       localidad = request.POST['localidad']
       correo = request.POST['correo']
       nacimiento = request.POST['nacimiento']
-   
+
+      usuariosregistrados = Usuarios.objects.all()
+
+      usuarioIgual = False
+
+      for u in usuariosregistrados:
+         #si el nombre ingresado es igual a un usuario ya registrado...
+
+         if nombreusuario == u.usuario:
+            error = "Ya hay un usuario registrado con ese nombre."
+            hayerror = True
+            return render(request, "Principal/registro.html", {"bandera": hayerror, "textoerror": error, "nombreusuario": nombreusuario, "nombre": nombre, "apellido": apellido, "contra": contra, "cc": cc, "localidad": localidad, "correo": correo, "nacimiento": nacimiento})
+
       textoerror = ""
       error = False
       error2 = False
@@ -96,20 +108,16 @@ def registro(request):
 
       if contra == cc:
          error = False
-            
+
       else:
          error = True
          textoerror += " Las contraseñas no coinciden. "
 
-
-         
       if localidad == "l":
          error2 = True
          textoerror += " Selecciona una localidad. "
       else:
          error2 = False
-         
-
 
       if nacimiento == "":
          error3 = True
@@ -120,18 +128,18 @@ def registro(request):
       #si hay un error
       if error == True or error2 == True or error3 == True:
          hayerror = True
-         return render(request, "Principal/registro.html", {"bandera":hayerror, "textoerror":textoerror, "nombreusuario":nombreusuario, "nombre":nombre, "apellido":apellido, "contra":contra, "cc":cc, "localidad":localidad, "correo":correo, "nacimiento":nacimiento})
+         return render(request, "Principal/registro.html", {"bandera": hayerror, "textoerror": textoerror, "nombreusuario": nombreusuario, "nombre": nombre, "apellido":apellido, "contra":contra, "cc":cc, "localidad":localidad, "correo":correo, "nacimiento":nacimiento})
 
-         #return HttpResponse(textoerror)
+            #return HttpResponse(textoerror)
       #si no hay errores
       elif error == False:
          hayerror = False
 
-         registro = Usuarios(usuario = nombreusuario, nombre = nombre, apellido = apellido, contrasena = contra, localidad = localidad, correo = correo, nacimiento = nacimiento)
+         registro = Usuarios(usuario=nombreusuario, nombre=nombre, apellido = apellido, contrasena = contra, localidad = localidad, correo = correo, nacimiento = nacimiento)
          registro.save()
          return render(request, "Principal/registro.html", {"bandera": hayerror})
-         #datos = nombreusuario , " " , nombre , " " , apellido , " " , contra , " " , cc , " " , localidad , " " , correo , " " , nacimiento
-         #return HttpResponse(datos)
+            #datos = nombreusuario , " " , nombre , " " , apellido , " " , contra , " " , cc , " " , localidad , " " , correo , " " , nacimiento
+            #return HttpResponse(datos)
       
    
    return render(request, "Principal/registro.html")
@@ -161,7 +169,7 @@ def olvido(request):
          asunto = "Recuperación de contraseña - Bustop"
          mensaje = "Hola "+ nombre+ " "+ apellido+ ". Tu contraseña es: "+ contraseña+ "."
 
-         send_mail(asunto, mensaje, email_remitente, ["brandonmora850@gmail.com"])
+         send_mail(asunto, mensaje, email_remitente, email_destino)
 
          return render(request, "Principal/olvidoContra.html", {"datospersona":datospersona,"busqueda":nombreusuario, "nombre":nombre, "apellido":apellido})
 
@@ -260,7 +268,20 @@ def altaCons(request):
 #ACTUALIZAR DATOS ----------------------------------------------------------------------------------------------
 def actUsuario(request):
 
-   return render(request, "Actualizar/actUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido']})
+   datospersona = Usuarios.objects.filter(usuario__icontains=request.session['sesion'])
+
+   if datospersona:
+      #se obtienen datos de la persona para mostrarlos en los camppos.
+       for dato in datospersona:
+           nombre = dato.nombre
+           apellido = dato.apellido
+           correo = dato.correo
+           contraseña = dato.contrasena
+           localidad = dato.localidad
+
+      
+
+   return render(request, "Actualizar/actUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido'], "nusuario": nombre, "ausuario":apellido, "lusuario":localidad, "cusuario": correo, "cc": correo})
 
 
 def actCons(request):
