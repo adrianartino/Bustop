@@ -12,90 +12,108 @@ Login
 
 {% block content %}
 <center>
-    <div class="container">
-    
-        <p style="font-family: 'Marvel', sans-serif; font-size: 70px;">Quejas y sugerencias.</p>
+    <form action="/quejaUsuario/" method="post">{% csrf_token %}
+        <div class="container">
 
-        <div class="row">
+            <p style="font-family: 'Marvel', sans-serif; font-size: 70px;">Quejas y sugerencias.</p>
 
-            <div class="col-6">
+            <div class="row">
 
-                <div class="row">
-                    <div class="col-6">
-                        <label>Selecciona una ruta:</label>
-                    </div>
-                    <div class="col-6">
-                        <div class="dropdown">
-                            <button type="button" class="btn btn-primary dropdown-toggle"
-                                data-toggle="dropdown">Desplegable</button>
-                            <div class="dropdown-menu">
-                                <div class="dropdown-header">sección uno</div>
-                                <a href="#" class="dropdown-item">Enlace 1</a>
-                                <a href="#" class="dropdown-item">Enlace 2</a>
-                                <a href="#" class="dropdown-item">Enlace 3</a>
-                                <div class="dropdown-divider"></div>
-                                <div class="dropdown-header">sección dos</div>
-                                <a href="#" class="dropdown-item">Enlace 4</a>
-                                <a href="#" class="dropdown-item disabled">Enlace 5</a>
-                            </div>
+                <div class="col-6">
+
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Selecciona una ruta:</label>
                         </div>
+                        <div class="col-6">
+                            <div class="dropdown">
+                                <select class="form-control titulo" name="ruta">
+                                    <option value="l">Ruta</option>
+                                    <option disabled class="dropdown-header">Gomez Palacio</div>
+                                    {% for a in arregloGomez %}
+                                    <option value="{{a.nombre_ruta}}">{{a.nombre_ruta}}</option>
+                                    {% endfor %}
+                                    
+                                    <option disabled class="dropdown-header">Lerdo
+                                    {% for  b in arregloLerdo %}
+                                    <option value="{{b.nombre_ruta}}">{{b.nombre_ruta}}</option>
+                                    {% endfor %}
+                                    <option disabled class="dropdown-header">Torreon
+                                    {% for x in arregloTorreon %}
+                                    <option value="{{x.nombre_ruta}}">{{x.nombre_ruta}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                     </div>
-                </div>
-                <br>
-
-                <div class="row">
-                    <div class="col-6">
-                        <label>Número de unidad:</label>
-                    </div>
-                    <div class="col-6">
-                        <input type="email" class="form-control" id="exampleFormControlInput1"
-                            placeholder="Opcional">
-                    </div>
-                </div>
-                <br>
-
-                
-
-            </div>
-
-            <div class="col-6">
-                <div class="img">
-                    <p style="font-family: 'Marvel', sans-serif; font-size: 35px;">Agregar imágen (opcional).</p>
                     
-                    <div class="image-upload">
-                        <label for="file-input">
-                            <img src="http://files.softicons.com/download/toolbar-icons/mono-general-icons-3-by-custom-icon-design/png/256x256/camera.png"
-                                alt="Click aquí para subir tu foto" title="Click aquí para subir tu foto" 
-                                data-toggle="tooltip" data-placement="bottom"
-                                title="Clic aquí para subir la foto!">
-                        </label>
-                        <input id="file-input" name="foto" type="file" />
-                    </div>
+
+
                 </div>
             </div>
+            <div class="row">
+                <div class="col-6">
+                    <label>Número de unidad:</label>
+                </div>
+                <div class="col-6">
+                    {% if bandera %}
+                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Opcional"
+                        pattern="[0-9]{1,2}" title="Ingrese un número de uno o dos dígitos." required name="unidad"
+                        value="{{unidad}}">
+                    {% else %}
+                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Opcional"
+                        pattern="[0-9]{1,2}" title="Ingrese un número de uno o dos dígitos." required name="unidad">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <br>
+
+        
+        <br>
+
+
+
+
+        <div class="col-6">
+            <div class="img">
+                <p style="font-family: 'Marvel', sans-serif; font-size: 35px;">Agregar imágen (opcional).</p>
+
+                <div class="image-upload">
+                    <label for="file-input">
+                        <img src="http://files.softicons.com/download/toolbar-icons/mono-general-icons-3-by-custom-icon-design/png/256x256/camera.png"
+                            alt="Click aquí para subir tu foto" title="Click aquí para subir tu foto"
+                            data-toggle="tooltip" data-placement="bottom" title="Clic aquí para subir la foto!">
+                    </label>
+                    <input id="file-input" name="foto" type="file" />
+                </div>
+            </div>
+        </div>
         </div>
 
         <div class="text-left">
             <label class="text-left">Texto de queja:</label>
         </div>
+        {% if bandera %}
         <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
-            placeholder="Ingrese su queja."></textarea>
+            placeholder="Ingrese su queja y/o sugerencia." required name="texto" value="{{texto2}}"></textarea>
+        {% else %}
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+            placeholder="Ingrese su queja y/o sugerencia." required name="texto"></textarea>
+        {% endif %}
 
-        <div class="text-left">
-            <label class="text-left">Sugerencias(opcional):</label>
-        </div>
-        <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Ingrese su sugerencia."
-        rows="3"></textarea>
         <br>
-        <button class="btn btn-primary"  style="background-color: #f8b400 ; border: none;">
+
+        <button class="btn btn-primary" style="background-color: #f8b400 ; border: none;">
             Mandar Queja</button>
-        
+
         <br>
         <br>
 
-        
 
-    </div>
+
+        </div>
+    </form>
+    
 
     <style>
         .image-upload > input
@@ -108,6 +126,31 @@ Login
         cursor: pointer;
         }
     </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    {% if bandera %}
+    <script type="text/javascript">
+        Swal.fire({
+            icon: 'error',
+            title: 'Algo salio mal..',
+            text: ' No has seleccionado ninguna ruta.',
+            footer: '<span style="color: green!important"> Corrige los datos para completar tu queja! </span>',
+            width: '40%'
+        });
+    </script>
+    {% endif %}
+
+    {% if bandera2 %}
+    <script type="text/javascript">
+        Swal.fire({
+            icon: 'success',
+            title: 'Wuuuuuuju!',
+            text: ' Tu queja ha sido enviada!!',
+            width: '40%'
+        });
+    </script>
+    {% endif %}
+
 </center>
 
 {% endblock %}

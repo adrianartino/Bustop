@@ -9,7 +9,9 @@ from django.conf import settings
 from django.core.mail import send_mail
 
 #importar modelos
-from appBustop.models import Usuarios
+from appBustop.models import Usuarios, Rutas, QuejasUsuarios
+
+from datetime import datetime
 
 
 
@@ -90,8 +92,6 @@ def registro(request):
       nacimiento = request.POST['nacimiento']
 
       usuariosregistrados = Usuarios.objects.all()
-
-      usuarioIgual = False
 
       for u in usuariosregistrados:
          #si el nombre ingresado es igual a un usuario ya registrado...
@@ -225,7 +225,32 @@ def mapaRutaLerdo(request):
 
 def quejaUsuario(request):
 
-   return render(request, "Usuarios/quejaUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido']})
+   rutasGomez = Rutas.objects.filter(localidad="Gomez Palacio")
+   rutasLerdo = Rutas.objects.filter(localidad="Lerdo")
+   rutasTorreon = Rutas.objects.filter(localidad__icontains="Torreon")
+
+   #si se da clic en el boton..
+   if request.method == "POST":
+
+      ruta = request.POST['ruta']
+      unidad = request.POST['unidad']
+      texto = request.POST['texto']
+
+      fecha = datetime.now()
+
+      if ruta == "l":
+         bandera=True
+         return render(request, "Usuarios/quejaUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido'], "arregloTorreon": rutasTorreon, "arregloGomez": rutasGomez, "arregloLerdo": rutasLerdo, "bandera":bandera, "unidad":unidad, "texto2":texto})
+
+      registroQueja = QuejasUsuarios(usuario=request.session['sesion'], nombre_ruta=ruta, unidad=unidad, fecha=fecha, texto=texto)
+      registroQueja.save()
+
+      bandera2 = True
+      
+      return render(request, "Usuarios/quejaUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido'], "arregloTorreon": rutasTorreon, "arregloGomez": rutasGomez, "arregloLerdo": rutasLerdo, "bandera2": bandera2})
+   
+
+   return render(request, "Usuarios/quejaUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido'], "arregloTorreon": rutasTorreon, "arregloGomez": rutasGomez, "arregloLerdo": rutasLerdo})
 
 
 #CONSESIONARIOS ----------------------------------------------------------------------------------------------
@@ -241,7 +266,8 @@ def infoCons(request):
 
 def quejasCons(request):
 
-   return render(request, "Consesionario/quejasCons.html")
+   return render(request, "Consesionario/infoCons.html")
+   
 
 
 def usuariosCons(request):
@@ -268,6 +294,42 @@ def altaCons(request):
 #ACTUALIZAR DATOS ----------------------------------------------------------------------------------------------
 def actUsuario(request):
 
+   if request.method == "POST":
+
+      actusuario = request.POST['actusuario']
+      actapellido = request.POST['actapellido']
+      actcontrasena = request.POST['actcontrasena']
+      actlocalidad = request.POST['actlocalidad']
+      actcorreo = request.POST['actcorreo']
+
+      actualizacion = Usuarios.objects.filter(usuario__icontains=request.session['sesion']).update(nombre=actusuario, apellido=actapellido, contrasena=actcontrasena, localidad=actlocalidad, correo=actcorreo)
+
+      actualizado = True
+      
+      #request.session['sesion'] = nombreusuario
+      request.session['nombre'] = actusuario
+      request.session['apellido'] = actapellido
+
+      datospersona = Usuarios.objects.filter(usuario__icontains=request.session['sesion'])
+
+      if datospersona:
+         #se obtienen datos de la persona para mostrarlos en los camppos.
+         for dato in datospersona:
+            nombre = dato.nombre
+            apellido = dato.apellido
+            correo = dato.correo
+            contraseña = dato.contrasena
+            localidad = dato.localidad
+
+      return render(request, "Actualizar/actUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido'], "nusuario": nombre, "ausuario": apellido, "lusuario": localidad, "cusuario": correo, "cc": correo, "contra": contraseña,  "bandera": actualizado})
+
+
+      
+     
+
+      
+
+
    datospersona = Usuarios.objects.filter(usuario__icontains=request.session['sesion'])
 
    if datospersona:
@@ -279,9 +341,10 @@ def actUsuario(request):
            contraseña = dato.contrasena
            localidad = dato.localidad
 
-      
+   
 
-   return render(request, "Actualizar/actUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido'], "nusuario": nombre, "ausuario":apellido, "lusuario":localidad, "cusuario": correo, "cc": correo})
+
+   return render(request, "Actualizar/actUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido'], "nusuario": nombre, "ausuario":apellido, "lusuario":localidad, "cusuario": correo, "cc": correo, "contra": contraseña})
 
 
 def actCons(request):
