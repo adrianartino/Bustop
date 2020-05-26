@@ -15,12 +15,12 @@ Login
     <div class="container">
         <p style="font-family: 'Marvel', sans-serif; font-size: 70px;">Introduce la ruta que buscas!</p>
 
-        <form action="#" method="post">
+        <form action="/buscarRuta/" method="post">{% csrf_token %}
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Buscar por nombre de ruta, color del camión o ciudad." name="busqueda" data-toggle="tooltip"
                     data-placement="left" title="Busca una ruta!">
                 <div class="input-group-btn">
-                    <button class="btn " href="#" type="submit"
+                    <button class="btn "  type="submit"
                         style="background-color: #216583!important;"><i class="fa fa-search"></i></button>
                 </div>
             </div>
@@ -28,12 +28,12 @@ Login
 
 
 
-
+        {% if encontro %}
         <div class="container mt-4" id="resultadobusqueda" >
                 <h1 style=" font-family: 'Marvel', sans-serif;  font-size:400%!important;">
                     Resultados de búsqueda!</h1>
                 <p style="font-family: 'Oswald', sans-serif; font-size:125%!important;">Busqueda realizada:
-                    Hamburgo.</p>
+                    {{busqueda}}</p>
 
                 <table class="table table-hover" style="font-family: 'Oswald', sans-serif; font-size:125%!important;">
                     <thead>
@@ -46,78 +46,28 @@ Login
 
 
                     <tbody>
+                        {% for b in busquedaRutas %}
                         <tr class="table-warning">
                             <td>
-                                <form action="#" method="post">
-                                    <button type="submit" name="isbn" value="Hamburgo">Hamburgo</button>
+                                <form action="/infoRuta/" method="post">{% csrf_token %}
+                                    <button type="submit" name="nomreRuta" 
+                                        value="{{b.nombre_ruta}}">{{b.nombre_ruta}}</button>
                                 </form>
                             </td>
-                            <td>Verde</td>
-                            <td>Torreon - Gomez - Lerdo</td>
+                            <td>{{b.color}}</td>
+                            <td>{{b.localidad}}</td>
                         </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
                 <br>
         </div>
 
+        {% endif %}
 
 
-        <p style="font-family: 'Marvel', sans-serif; font-size: 70px;">Ruta: Hamburgo.</p>
 
-        <div class="row">
-
-            <div class="col-6">
-
-                <div class="row">
-                    <div class="col-6">
-                        <label >Nombre de Ruta:</label>
-                    </div>
-                    <div class="col-6">
-                        <input class="form-control" type="text" placeholder="Hamburgo." readonly>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-6">
-                        <label>Número de camiones:</label>
-                    </div>
-                    <div class="col-6">
-                        <input class="form-control" type="text" placeholder="40." readonly>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-6">
-                        <label>Color de la ruta:</label>
-                    </div>
-                    <div class="col-6">
-                        <input class="form-control" type="text" placeholder="Verde." readonly>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="col-6">
-                <div class="img">
-                    <img src="{% static 'Img/Hamburgo.jpeg' %}" style="width: 55%;">
-                </div>
-            </div>
-        </div>
-
-        <p style="font-family: 'Marvel', sans-serif; font-size: 40px;">Mapa de ruta.</p>
-        <div class="img">
-            <img src="{% static 'Img/mapaHamburgo.jpg' %}" style="width: 55%;">
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-6">
-                <label>Tiempos de llegada del camión en la ruta:</label>
-            </div>
-            <div class="col-6">
-                <input class="form-control" type="text" placeholder="11:00 11:15." readonly>
-            </div>
-        </div>
-        <br>
+        
 
 
     </div>

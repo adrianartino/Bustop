@@ -39,4 +39,5 @@ urlpatterns = [
     path('actUsuario/', views.actUsuario),
     path('actCons/', views.actCons),
     path('salir/', views.salir),
+    path('infoRuta/', views.infoRuta),
 ]

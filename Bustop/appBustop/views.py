@@ -13,6 +13,8 @@ from appBustop.models import Usuarios, Rutas, QuejasUsuarios
 
 from datetime import datetime
 
+from django.contrib.postgres.search import SearchQuery, SearchVector
+
 
 
 # Create your views here.
@@ -194,7 +196,42 @@ def principalUsuario(request):
 
 def buscarRuta(request):
 
+   #cuando el usuario de clic en buscar..
+   if request.method == "POST":
+
+      busqueda = request.POST['busqueda']
+
+      #Si funciona pero con la búsqueda exacta
+      busquedaRutas = Rutas.objects.annotate(
+          search=SearchVector('nombre_ruta', 'color', 'localidad')
+      ).filter(search=SearchQuery(busqueda))
+      #busquedaRutas = Rutas.objects.annotate(search=SearchVector('nombre_ruta', 'localidad', 'color'),).filter(search=busqueda)
+
+      #si encuentra algo relacionado con esa búsqueda..
+      if busquedaRutas:
+         encontro = True
+         return render(request, "Usuarios/bRutaUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido'], "busquedaRutas":busquedaRutas, "encontro":encontro, "busqueda":busqueda})
+      
+      #si no hay resultados..
+      texto = "jajaja"
+      return HttpResponse(texto)
+
    return render(request, "Usuarios/bRutaUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido']})
+
+def infoRuta(request):
+
+   #se obtiene el nombre de la ruta de la cual el usuario quiere info 
+   nombreRuta = request.POST['nomreRuta']
+
+   infoRuta = Rutas.objects.filter(nombre_ruta__icontains=nombreRuta)
+
+   for x in infoRuta:
+      localidad = x.localidad
+      ncamiones = x.ncamiones
+      color = x.color
+      tiempo = x.tiempo
+
+   return render(request, "Usuarios/infoRuta.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido'] , "nombreRuta":nombreRuta, "localidad":localidad, "ncamiones":ncamiones, "color":color, "tiempo":tiempo})
 
 #BUSCAR RUTA POS UBICACIÓN.
 
