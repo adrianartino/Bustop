@@ -14,6 +14,7 @@ Login
 <center>
    <p style="font-family: 'Marvel', sans-serif; font-size: 70px;">Ruta: Hamburgo.</p>
 
+   {% for i in infoRuta %} 
    <div class="row">
 
        <div class="col-6">
@@ -23,7 +24,16 @@ Login
                    <label>Nombre de Ruta:</label>
                </div>
                <div class="col-6">
-                   <input class="form-control" type="text" placeholder="Hamburgo." readonly>
+                   <input class="form-control" type="text" value="{{i.nombre_ruta}}" readonly>
+               </div>
+           </div>
+           <br>
+           <div class="row">
+               <div class="col-6">
+                   <label>Localidad:</label>
+               </div>
+               <div class="col-6">
+                   <input class="form-control" type="text" value="{{i.localidad}}" readonly>
                </div>
            </div>
            <br>
@@ -32,7 +42,7 @@ Login
                    <label>Número de camiones:</label>
                </div>
                <div class="col-6">
-                   <input class="form-control" type="text" placeholder="40." readonly>
+                   <input class="form-control" type="text" value="{{i.ncamiones}}" readonly>
                </div>
            </div>
            <br>
@@ -41,7 +51,7 @@ Login
                    <label>Color de la ruta:</label>
                </div>
                <div class="col-6">
-                   <input class="form-control" type="text" placeholder="Verde." readonly>
+                   <input class="form-control" type="text" value="{{i.color}}" readonly>
                </div>
            </div>
 
@@ -64,13 +74,16 @@ Login
            <label>Tiempos de llegada del camión en la ruta:</label>
        </div>
        <div class="col-6">
-           <input class="form-control" type="text" placeholder="11:00 11:15." readonly>
+           <div class="col-6">
+               <input class="form-control" type="text" value="{{i.tiempo}} minutos." readonly>
+           </div>
        </div>
    </div>
    <br>
    <button class="btn btn-primary" id="menu-toggle" style="background-color: #f8b400 ; border: none;">Generar Informe</button>
    <br>
    <br>
+   {% endfor %}
 
 </center>
 

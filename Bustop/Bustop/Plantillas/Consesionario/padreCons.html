@@ -37,7 +37,7 @@
         <div class="bg-light border-right" id="sidebar-wrapper">
 
             <div class="sidebar-heading text-center font-weight-bold" style="background-color: #585B5E!important; 
-              color: #f8b400;"> Consesionario</div>
+              color: #f8b400;"> Consesionario : {{nombreusuario}}</div>
             <div style="background-color: #585B5E!important;">
                 <center>
                     <i class="fas fa-user-circle" style="font-size:80px; color: white;"></i>
@@ -46,15 +46,19 @@
             </div>
             <div class="list-group list-group-flush">
 
-                <a href="#" id="b2" class="list-group-item list-group-item-action bg-light 
+                <a href="/principalCons/" id="b2" class="list-group-item list-group-item-action bg-light 
         animated slideInUp ">
-                    <i class="fa fa-info-circle " id="icono1"></i> Información ruta</a>
+                    <i class="fa fa-home " id="icono1"></i> Página Principal</a>
 
-                <a href="#" id="b3" class="list-group-item list-group-item-action bg-light
+                <a href="/infoCons/" id="b2" class="list-group-item list-group-item-action bg-light 
+        animated slideInUp ">
+                    <i class="fa fa-info-circle " id="icono1"></i> Información de mi ruta</a>
+
+                <a href="/quejasCons/" id="b3" class="list-group-item list-group-item-action bg-light
         animated slideInUp ">
                     <i class="fas fa-gavel" id="icono2"></i> Quejas y sugerencias</a>
 
-                <a href="#" id="b5" class="list-group-item list-group-item-action bg-light
+                <a href="/usuariosCons/" id="b5" class="list-group-item list-group-item-action bg-light
         animated slideInUp ">
                     <i class="fas fa-users" id="icono4"></i> Ususarios de mi ruta</a>
             </div>
@@ -102,9 +106,9 @@
 
                         <li class="nav-item">
                             <a class="nav-link" style="color:white; font-family: 'Marvel', sans-serif; font-size: 18px;"
-                                href="https://open.spotify.com/artist/1QOmebWGB6FdFtW7Bo3F0W" data-toggle="tooltip"
+                                href="/salirCons/" data-toggle="tooltip"
                                 data-placement="bottom" title="Escucha a Gustavo Cerati!">
-                                <i class="fas fa-sign-out-alt" style="font-size:20px"></i> Salir</a>
+                                <i  class="fas fa-sign-out-alt" style="font-size:20px"></i> Salir</a>
                         </li>
 
 

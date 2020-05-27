@@ -9,7 +9,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 
 #importar modelos
-from appBustop.models import Usuarios, Rutas, QuejasUsuarios, Admin, Concesionario, rutasAgregadas
+from appBustop.models import Usuarios, Rutas, QuejasUsuarios, Admin, Concesionario, rutasAgregadas, ConcAgregados, rutasBuscadas
 
 from datetime import datetime
 
@@ -274,13 +274,6 @@ def buscarRuta(request):
 
       busqueda = request.POST['busqueda']
 
-      #search = "%{}%".format(busqueda)
-
-      # busquedaRutas = Rutas.query.filter(
-      #     (appBustop_Rutas.nombre_ruta.like(search)) | (appBustop_Rutas.color.like(
-      #         search)) | (appBustop_Rutas.localidad.like(search))
-      # )
-
 
 
       #Si funciona pero con la búsqueda exacta
@@ -304,6 +297,9 @@ def infoRuta(request):
 
    #se obtiene el nombre de la ruta de la cual el usuario quiere info 
    nombreRuta = request.POST['nomreRuta']
+
+   rutaBuscada = rutasBuscadas(usuario=request.session['sesion'], nombre_ruta = nombreRuta)
+   rutaBuscada.save()
 
    infoRuta = Rutas.objects.filter(nombre_ruta__icontains=nombreRuta)
 
@@ -386,18 +382,52 @@ def principalCons(request):
 
 def infoCons(request):
 
-   return render(request, "Consesionario/infoCons.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre']})
+   infoCon = Concesionario.objects.filter(conce=request.session['sesion'])
+
+   for i in infoCon:
+      rutaEncargada = i.nombre_ruta
+
+   infoRuta = Rutas.objects.filter(nombre_ruta = rutaEncargada)
+
+
+
+   return render(request, "Consesionario/infoCons.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "infoRuta":infoRuta})
 
 
 def quejasCons(request):
 
-   return render(request, "Consesionario/infoCons.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre']})
+   infoCon = Concesionario.objects.filter(conce=request.session['sesion'])
+
+   for i in infoCon:
+      rutaEncargada = i.nombre_ruta
+
+   quejas = QuejasUsuarios.objects.filter(nombre_ruta=rutaEncargada)
+
+   contador = 0
+
+   for i in quejas:
+      contador += 1
+
+
+   return render(request, "Consesionario/quejasCons.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "rutaEncargada":rutaEncargada, "contador":contador})
    
 
 
 def usuariosCons(request):
 
-   return render(request, "Consesionario/usuariosCons.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre']})
+   infoCon = Concesionario.objects.filter(conce=request.session['sesion'])
+
+   for i in infoCon:
+      rutaEncargada = i.nombre_ruta
+
+   busquedas = rutasBuscadas.objects.filter(nombre_ruta=rutaEncargada)
+
+   contador = 0
+
+   for i in busquedas:
+      contador += 1
+
+   return render(request, "Consesionario/usuariosCons.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "rutaEncargada": rutaEncargada, "contador": contador})
 
 
 #ADMINISTRADORES ----------------------------------------------------------------------------------------------
@@ -461,7 +491,33 @@ def altaRuta(request):
 
 def altaCons(request):
 
-   return render(request, "Administrador/altaCons.html", {"nombreusuario": request.session['sesion']})
+   rutas = Rutas.objects.all()
+
+   if request.method == "POST":
+
+      usuarioCons = request.POST['usuarioCons']
+      contraCons = request.POST['contraCons']
+      nombreCons = request.POST['nombreCons']
+      rutaCons = request.POST['rutaCons']
+      correoCons = request.POST['correoCons']
+
+      #si no elige ruta
+      if rutaCons == "l":
+
+         bandera = True
+         return render(request, "Administrador/altaCons.html", {"nombreusuario": request.session['sesion'], "rutas": rutas, "bandera":bandera})
+
+      registroCons = Concesionario(conce=usuarioCons, contrasena=contraCons, nombre_conce=nombreCons, nombre_ruta=rutaCons, correo=correoCons)
+      registroCons.save()
+
+      registroAdmin = ConcAgregados(
+          conce=usuarioCons, nombre_admin=request.session['sesion'])
+      registroAdmin.save()
+
+      bandera2 = True
+      return render(request, "Administrador/altaCons.html", {"nombreusuario": request.session['sesion'], "rutas": rutas, "bandera2": bandera2})
+
+   return render(request, "Administrador/altaCons.html", {"nombreusuario": request.session['sesion'], "rutas":rutas})
 
 def bajaRuta(request):
 
@@ -498,7 +554,35 @@ def bajaRuta(request):
 
 def bajaCons(request):
 
-   return render(request, "Administrador/bajaCons.html", {"nombreusuario": request.session['sesion']})
+   consecionarios = Concesionario.objects.all()
+
+   consAdmin = ConcAgregados.objects.all()
+
+   lista = zip(consecionarios, consAdmin)
+
+   if request.method == "POST":
+
+      consEliminar = request.POST['consEliminar']
+
+      r = Concesionario.objects.get(conce=consEliminar)
+
+      t = ConcAgregados.objects.get(conce=consEliminar)
+
+
+      r.delete()
+      t.delete()
+
+      consecionarios = Concesionario.objects.all()
+
+      consAdmin = ConcAgregados.objects.all()
+
+      lista = zip(consecionarios, consAdmin)
+
+      bandera = True
+
+      return render(request, "Administrador/bajaCons.html", {"nombreusuario": request.session['sesion'], "con": consecionarios, "consAdmin": consAdmin, "lista": lista, "bandera": bandera})
+
+   return render(request, "Administrador/bajaCons.html", {"nombreusuario": request.session['sesion'], "lista":lista})
 
 
 #ACTUALIZAR DATOS ----------------------------------------------------------------------------------------------
