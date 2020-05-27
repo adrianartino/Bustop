@@ -36,8 +36,12 @@ urlpatterns = [
     path('principalAdmin/', views.principalAdmin),
     path('altaRuta/', views.altaRuta),
     path('altaCons/', views.altaCons),
+    path('bajaRuta/', views.bajaRuta),
+    path('bajaCons/', views.bajaCons),
     path('actUsuario/', views.actUsuario),
     path('actCons/', views.actCons),
     path('salir/', views.salir),
+    path('salirAdmin/', views.salirAdmin),
+    path('salirCons/', views.salirCons),
     path('infoRuta/', views.infoRuta),
 ]

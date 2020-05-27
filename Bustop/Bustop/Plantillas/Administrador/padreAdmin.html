@@ -37,7 +37,7 @@
         <div class="bg-light border-right" id="sidebar-wrapper">
 
             <div class="sidebar-heading text-center font-weight-bold" style="background-color: #585B5E!important; 
-              color: #f8b400;"> Consesionario</div>
+              color: #f8b400;"> Administrador: {{nombreusuario}}</div>
             <div style="background-color: #585B5E!important;">
                 <center>
                     <i class="fas fa-user-circle" style="font-size:80px; color: white;"></i>
@@ -46,13 +46,21 @@
             </div>
             <div class="list-group list-group-flush">
 
-                <a href="#" id="b2" class="list-group-item list-group-item-action bg-light 
+                <a href="/altaRuta/" id="b2" class="list-group-item list-group-item-action bg-light 
         animated slideInUp ">
                     <i class="fa fa-bus " id="icono1"></i> Dar de alta Ruta</a>
 
-                <a href="#" id="b3" class="list-group-item list-group-item-action bg-light
+                <a href="/altaCons/" id="b3" class="list-group-item list-group-item-action bg-light
         animated slideInUp ">
                     <i class="fas fa-user-plus" id="icono2"></i> Dar de alta Consesionario</a>
+
+                <a href="/bajaRuta/" id="b3" class="list-group-item list-group-item-action bg-light
+        animated slideInUp ">
+                    <i class="fas fa-minus" id="icono2"></i> Dar de baja Ruta</a>
+
+                <a href="/bajaCons/" id="b3" class="list-group-item list-group-item-action bg-light
+        animated slideInUp ">
+                    <i class="fas fa-user-times " id="icono2"></i> Dar de baja Consesionario</a>
 
             </div>
 
@@ -83,7 +91,7 @@
 
                         <li class="nav-item">
                             <a class="nav-link" style="color:white; font-family: 'Marvel', sans-serif; font-size: 18px;"
-                                href="https://open.spotify.com/artist/1QOmebWGB6FdFtW7Bo3F0W" data-toggle="tooltip"
+                                href="/salirAdmin/" data-toggle="tooltip"
                                 data-placement="bottom" title="Escucha a Gustavo Cerati!">
                                 <i class="fas fa-sign-out-alt" style="font-size:20px"></i> Salir</a>
                         </li>

@@ -21,17 +21,11 @@ Login
                 <label><i class="fas fa-clock"></i> Lista de rutas de Gómez Palacio:</label>
 
                 <ul class="list-group">
+                    {% for i in rutasLerdo %}
                     <li class="list-group-item">
-                        <a href="#">Hamburgo.</a>
+                        <a href="{{i.nombre_ruta}}">{{i.nombre_ruta}}.</a>
                     </li>
-
-                    <li class="list-group-item">
-                        <a href="#">Directo.</a>
-                    </li>
-
-                    <li class="list-group-item">
-                        <a href="#">Cereso.</a>
-                    </li>
+                    {% endfor %}
                 </ul>
             </div>
 

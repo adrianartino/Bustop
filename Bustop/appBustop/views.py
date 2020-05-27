@@ -9,13 +9,15 @@ from django.conf import settings
 from django.core.mail import send_mail
 
 #importar modelos
-from appBustop.models import Usuarios, Rutas, QuejasUsuarios
+from appBustop.models import Usuarios, Rutas, QuejasUsuarios, Admin, Concesionario, rutasAgregadas
 
 from datetime import datetime
 
 from django.contrib.postgres.search import SearchQuery, SearchVector
 
-
+usuarioNormalLoguqado = False
+adminLogueado = False
+consLogueado = False
 
 # Create your views here.
 
@@ -35,8 +37,16 @@ def login(request):
 
          datospersona = Usuarios.objects.filter(usuario__icontains=nombreusuario)
 
+         administradores = Admin.objects.filter(
+             nombre_admin__icontains=nombreusuario)
+
+         concesionarios = Concesionario.objects.filter(
+             conce__icontains=nombreusuario)
+
          #Si encuentra a una persona con ese usuario
          if datospersona :
+
+            
 
             for dato in datospersona:
                contrareal = dato.contrasena
@@ -49,10 +59,56 @@ def login(request):
             #Si ingresa bien su usuario y contraseña
             if contra == contrareal:
 
+               usuarioNormalLoguqado = True
+
                request.session['sesion'] = nombreusuario
                request.session['nombre'] = nombre
                request.session['apellido'] = apellido
                return redirect('/principalUsuario/')
+
+            #Contraseña esta mal
+            else:
+               bandera = True
+               bandera2 = True
+               error = "Ha ingresado mal la contraseña."
+               return render(request, "Principal/login.html", {"bandera": bandera, "bandera2": bandera2, "error": error, "nombreusuario": nombreusuario})
+               # return HttpResponse(mensaje)
+
+         #si se encuentra en administradores.
+         elif administradores:
+
+            for dato in administradores:
+               contrareal = dato.contrasena
+               correo = dato.correo
+
+            #Si ingresa bien su usuario y contraseña
+            if contra == contrareal:
+
+               request.session['sesion'] = nombreusuario
+               return redirect('/principalAdmin/')
+
+            #Contraseña esta mal
+            else:
+               bandera = True
+               bandera2 = True
+               error = "Ha ingresado mal la contraseña."
+               return render(request, "Principal/login.html", {"bandera": bandera, "bandera2": bandera2, "error": error, "nombreusuario": nombreusuario})
+               # return HttpResponse(mensaje)
+
+         elif concesionarios:
+
+            for dato in concesionarios:
+               contrareal = dato.contrasena
+               nombre = dato.nombre_conce
+               rutaencargado = dato.nombre_ruta
+               correo = dato.correo
+
+            #Si ingresa bien su usuario y contraseña
+            if contra == contrareal:
+
+               request.session['sesion'] = nombreusuario
+               request.session['nombre'] = nombre
+               return redirect('/principalCons/')
 
             #Contraseña esta mal
             else:
@@ -77,6 +133,19 @@ def salir(request):
    del request.session["sesion"]
    del request.session['nombre']
    del request.session['apellido'] 
+
+   return redirect('/login/')
+
+
+def salirAdmin(request):
+   del request.session["sesion"]
+
+   return redirect('/login/')
+
+
+def salirCons(request):
+   del request.session["sesion"]
+   del request.session['nombre']
 
    return redirect('/login/')
 
@@ -189,7 +258,11 @@ def olvido(request):
 
 def principalUsuario(request):
 
-    return render(request, "Usuarios/bienUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido']})
+   
+
+   return render(request, "Usuarios/bienUsuario.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido']})
+
+   
 
 #BUSCAR RUTA
 
@@ -200,6 +273,15 @@ def buscarRuta(request):
    if request.method == "POST":
 
       busqueda = request.POST['busqueda']
+
+      #search = "%{}%".format(busqueda)
+
+      # busquedaRutas = Rutas.query.filter(
+      #     (appBustop_Rutas.nombre_ruta.like(search)) | (appBustop_Rutas.color.like(
+      #         search)) | (appBustop_Rutas.localidad.like(search))
+      # )
+
+
 
       #Si funciona pero con la búsqueda exacta
       busquedaRutas = Rutas.objects.annotate(
@@ -245,17 +327,23 @@ def ubicacionRuta(request):
 
 def mapaRutaTorreon(request):
 
-   return render(request, "Usuarios/Mapas/mapaTorreon.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido']})
+   rutasTorreon = Rutas.objects.filter(localidad__icontains="Torreon")
+
+   return render(request, "Usuarios/Mapas/mapaTorreon.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido'], "rutasTorreon":rutasTorreon})
 
 
 def mapaRutaGomez(request):
 
-   return render(request, "Usuarios/Mapas/mapaGomez.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido']})
+   rutasGomez = Rutas.objects.filter(localidad__icontains="Gomez Palacio")
+
+   return render(request, "Usuarios/Mapas/mapaGomez.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido'], "rutasGomez": rutasGomez})
 
 
 def mapaRutaLerdo(request):
 
-   return render(request, "Usuarios/Mapas/mapaLerdo.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido']})
+   rutasLerdo = Rutas.objects.filter(localidad__icontains="Lerdo")
+
+   return render(request, "Usuarios/Mapas/mapaLerdo.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido'], "rutasLerdo": rutasLerdo})
 
 #QUEJAS Y SUGERENCIAS.
 
@@ -293,39 +381,124 @@ def quejaUsuario(request):
 #CONSESIONARIOS ----------------------------------------------------------------------------------------------
 def principalCons(request):
 
-   return render(request, "Consesionario/bienCons.html")
+   return render(request, "Consesionario/bienCons.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre']})
 
 
 def infoCons(request):
 
-   return render(request, "Consesionario/infoCons.html")
+   return render(request, "Consesionario/infoCons.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre']})
 
 
 def quejasCons(request):
 
-   return render(request, "Consesionario/infoCons.html")
+   return render(request, "Consesionario/infoCons.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre']})
    
 
 
 def usuariosCons(request):
 
-   return render(request, "Consesionario/usuariosCons.html")
+   return render(request, "Consesionario/usuariosCons.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre']})
 
 
 #ADMINISTRADORES ----------------------------------------------------------------------------------------------
 def principalAdmin(request):
 
-   return render(request, "Administrador/bienAdmin.html")
+   return render(request, "Administrador/bienAdmin.html", {"nombreusuario": request.session['sesion']})
 
 
 def altaRuta(request):
 
-   return render(request, "Administrador/altaRuta.html")
+   if request.method == "POST":
+
+      nombreRuta = request.POST['nombreRuta']
+      numeroCamiones = request.POST['numeroCamiones']
+      localidad = request.POST['localidad']
+      minutos = request.POST['minutos']
+
+      color = ""
+      
+
+      if localidad == "l":
+         error = "No se ha escogido la localidad de la ruta."
+         bandera = True
+         return render(request, "Administrador/altaRuta.html", {"nombreusuario": request.session['sesion'], "textoerror": error, "bandera":bandera})
+      
+      if minutos == "":
+         error = "Tiempo aproximado no valido."
+         bandera = True
+         return render(request, "Administrador/altaRuta.html", {"nombreusuario": request.session['sesion'], "textoerror": error, "bandera": bandera})
+      
+      if minutos != "":
+         minutos2 = int(minutos)
+
+         if minutos2 < 5:
+            error = "Tiempo aproximado no valido."
+            bandera = True
+            return render(request, "Administrador/altaRuta.html", {"nombreusuario": request.session['sesion'], "textoerror": error, "bandera": bandera})
+
+      if localidad == "Torreon":
+         color = "Verde"
+
+      if localidad == "Gomez Palacio":
+         color = "Azul"
+
+      if localidad == "Lerdo":
+         color = "Rojo"
+
+      bandera2 = True
+      registroRuta = Rutas(nombre_ruta=nombreRuta, localidad=localidad,
+                           ncamiones=numeroCamiones, color=color, tiempo=minutos)
+      registroRuta.save()
+
+      registroAdmin = rutasAgregadas(nombre_ruta=nombreRuta, nombre_admin = request.session['sesion'])
+      registroAdmin.save()
+
+      return render(request, "Administrador/altaRuta.html", {"nombreusuario": request.session['sesion'], "bandera2": bandera2})
+
+         
+   return render(request, "Administrador/altaRuta.html", {"nombreusuario": request.session['sesion']})
 
 
 def altaCons(request):
 
-   return render(request, "Administrador/altaCons.html")
+   return render(request, "Administrador/altaCons.html", {"nombreusuario": request.session['sesion']})
+
+def bajaRuta(request):
+
+   rutas = Rutas.objects.all()
+
+   rutasAdmin = rutasAgregadas.objects.all()
+
+   lista = zip(rutas,rutasAdmin)
+
+   if request.method == "POST":
+
+      rutaEliminar = request.POST['rutaEliminar']
+
+      r = Rutas.objects.get(nombre_ruta = rutaEliminar)
+
+      t = rutasAgregadas.objects.get(nombre_ruta=rutaEliminar)
+
+
+      r.delete()
+      t.delete()
+
+      rutas = Rutas.objects.all()
+
+      rutasAdmin = rutasAgregadas.objects.all()
+
+      lista = zip(rutas, rutasAdmin)
+
+      bandera = True
+
+      return render(request, "Administrador/bajaRuta.html", {"nombreusuario": request.session['sesion'], "rutas": rutas, "rutasAdmin": rutasAdmin, "lista": lista, "bandera":bandera})
+
+   return render(request, "Administrador/bajaRuta.html", {"nombreusuario": request.session['sesion'], "rutas":rutas, "rutasAdmin":rutasAdmin, "lista":lista})
+
+
+def bajaCons(request):
+
+   return render(request, "Administrador/bajaCons.html", {"nombreusuario": request.session['sesion']})
 
 
 #ACTUALIZAR DATOS ----------------------------------------------------------------------------------------------
