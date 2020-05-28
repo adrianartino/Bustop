@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
     <link href="signin.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Marvel:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
 
     <title>
         {% block tittle %}
@@ -46,21 +47,47 @@
             </div>
             <div class="list-group list-group-flush">
 
+                {% if principal %}
+                <a href="/principalCons/" id="b2" class="list-group-item list-group-item-action bg-light 
+        animated slideInUp " style="background-color: #f8b400!important;">
+                    <i style="color:white!important;"  class="fa fa-home " id="icono1"></i> Página Principal</a>
+                {% else %}
                 <a href="/principalCons/" id="b2" class="list-group-item list-group-item-action bg-light 
         animated slideInUp ">
                     <i class="fa fa-home " id="icono1"></i> Página Principal</a>
+                {% endif %}
 
+                {% if infu %}
+                <a href="/infoCons/" id="b2" class="list-group-item list-group-item-action bg-light 
+        animated slideInUp " style="background-color: #f8b400!important;">
+                    <i style="color:white!important;" class="fa fa-info-circle " id="icono1"></i> Información de mi
+                    ruta</a>
+                {% else %}
                 <a href="/infoCons/" id="b2" class="list-group-item list-group-item-action bg-light 
         animated slideInUp ">
                     <i class="fa fa-info-circle " id="icono1"></i> Información de mi ruta</a>
+                {% endif %}
+                
 
+                {% if queco %}
+                <a href="/quejasCons/" id="b3" class="list-group-item list-group-item-action bg-light
+        animated slideInUp " style="background-color: #f8b400!important;">
+                    <i style="color:white!important;" class="fas fa-gavel" id="icono2"></i> Quejas y sugerencias</a>
+                {% else %}
                 <a href="/quejasCons/" id="b3" class="list-group-item list-group-item-action bg-light
         animated slideInUp ">
                     <i class="fas fa-gavel" id="icono2"></i> Quejas y sugerencias</a>
+                {% endif %}
 
+                {% if usuco %}
+                <a href="/usuariosCons/" id="b5" class="list-group-item list-group-item-action bg-light
+        animated slideInUp " style="background-color: #f8b400!important;">
+                    <i style="color:white!important;" class="fas fa-users" id="icono4"></i> Ususarios de mi ruta</a>
+                {% else %}
                 <a href="/usuariosCons/" id="b5" class="list-group-item list-group-item-action bg-light
         animated slideInUp ">
                     <i class="fas fa-users" id="icono4"></i> Ususarios de mi ruta</a>
+                {% endif %}
             </div>
 
         </div>
@@ -89,16 +116,16 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="#"
                                 style="color:white; font-family: 'Marvel', sans-serif; font-size: 18px;"
-                                data-toggle="tooltip" data-placement="left" title="Regresar al Git de Artiño!"><i
+                                data-toggle="tooltip" data-placement="left" title="Contactanos!"><i
                                     class="fa fa-users" style="font-size:22px"></i> Nosotros <span
                                     class="sr-only">(current)</span></a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link" style="color:white; font-family: 'Marvel', sans-serif; font-size: 18px;"
-                                href="https://twitter.com/cerati?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"
+                                href="/actCons/"
                                 data-toggle="tooltip" data-placement="bottom"
-                                title="Sigue la cuenta oficial de Cerati!">
+                                title="Actualiza tus datos!">
                                 <i class="fas fa-wrench" style="font-size:22px"></i>
                                 Actualizar mis datos</a>
                         </li>
@@ -107,7 +134,7 @@
                         <li class="nav-item">
                             <a class="nav-link" style="color:white; font-family: 'Marvel', sans-serif; font-size: 18px;"
                                 href="/salirCons/" data-toggle="tooltip"
-                                data-placement="bottom" title="Escucha a Gustavo Cerati!">
+                                data-placement="bottom" title="Salir de bustop!">
                                 <i  class="fas fa-sign-out-alt" style="font-size:20px"></i> Salir</a>
                         </li>
 

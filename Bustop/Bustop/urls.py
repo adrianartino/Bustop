@@ -44,4 +44,5 @@ urlpatterns = [
     path('salirAdmin/', views.salirAdmin),
     path('salirCons/', views.salirCons),
     path('infoRuta/', views.infoRuta),
+    path('usuariosAdmin/', views.usuariosAdmin),
 ]

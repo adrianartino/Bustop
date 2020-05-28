@@ -12,7 +12,8 @@ Login
 
 {% block content %}
 <center>
-    <p style="font-family: 'Marvel', sans-serif; font-size: 70px;">Dar de alta ruta.</p>
+    <p class="animate__animated animate__bounceInDown" style="font-family: 'Marvel', sans-serif; font-size: 70px;">Dar
+        de alta ruta.</p>
 
     <form action="/altaRuta/" method="post">{% csrf_token %}
         <div class="row">
@@ -24,8 +25,14 @@ Login
                         <label>Nombre de Ruta:</label>
                     </div>
                     <div class="col-6">
+                        {% if bandera %}
+                        <input class="form-control" type="text" placeholder="Ingresar nombre de ruta."
+                            pattern="[A-Za-z ]{2,30}" required name="nombreRuta" title="Debe ingresar solo letras."
+                            value="{{nombreRuta}}">
+                        {% else %}
                         <input class="form-control" type="text" placeholder="Ingresar nombre de ruta."
                             pattern="[A-Za-z ]{2,30}" required name="nombreRuta" title="Debe ingresar solo letras.">
+                        {% endif %}
                     </div>
                 </div>
                 <br>
@@ -34,8 +41,15 @@ Login
                         <label>Número de camiones:</label>
                     </div>
                     <div class="col-6">
+                        {% if bandera %}
+                        <input class="form-control" type="numer" placeholder="Ingresar n° de camiones."
+                            pattern="[0-9]{1,2}" required name="numeroCamiones" title="Solo se permiten números."
+                            value="{{numeroCamiones}}">
+                        {% else %}
                         <input class="form-control" type="numer" placeholder="Ingresar n° de camiones."
                             pattern="[0-9]{1,2}" required name="numeroCamiones" title="Solo se permiten números.">
+                        {% endif %}
+                        
                     </div>
                 </div>
                 <br>
@@ -45,10 +59,42 @@ Login
                     </div>
                     <div class="col-6">
                         <select class="form-control titulo" name="localidad">
-                            <option value="l">Elija color.</option>
+                            {% if bandera %}
+
+                                {% if localidad == "l" %}
+                                <option value="l">Elija localidad.</option>
+                                <option value="Torreon" id="aa" style="background-color: lightgreen;">Torreon</option>
+                                <option value="Lerdo" style="background-color: lightcoral;">Lerdo</option>
+                                <option value="Gomez Palacio" style="background-color: lightskyblue;">Gomez Palacio</option>
+                                {% endif %}
+
+                                {% if localidad == "Torreon" %}
+                                <option value="l">Elija localidad.</option>
+                                <option selected value="Torreon" id="aa" style="background-color: lightgreen;">Torreon</option>
+                                <option value="Lerdo" style="background-color: lightcoral;">Lerdo</option>
+                                <option value="Gomez Palacio" style="background-color: lightskyblue;">Gomez Palacio</option>
+                                {% endif %}
+
+                                {% if localidad == "Lerdo" %}
+                                <option value="l">Elija localidad.</option>
+                                <option value="Torreon" id="aa" style="background-color: lightgreen;">Torreon</option>
+                                <option selected value="Lerdo" style="background-color: lightcoral;">Lerdo</option>
+                                <option value="Gomez Palacio" style="background-color: lightskyblue;">Gomez Palacio</option>
+                                {% endif %}
+
+                                {% if localidad == "Gomez Palacio" %}
+                                <option value="l">Elija localidad.</option>
+                                <option value="Torreon" id="aa" style="background-color: lightgreen;">Torreon</option>
+                                <option value="Lerdo" style="background-color: lightcoral;">Lerdo</option>
+                                <option selected value="Gomez Palacio" style="background-color: lightskyblue;">Gomez Palacio</option>
+                                {% endif %}
+                                
+                            {% else %}
+                            <option value="l">Elija localidad.</option>
                             <option value="Torreon" id="aa" style="background-color: lightgreen;">Torreon</option>
                             <option value="Lerdo" style="background-color: lightcoral;">Lerdo</option>
                             <option value="Gomez Palacio" style="background-color: lightskyblue;">Gomez Palacio</option>
+                            {% endif %}
                         </select>
                     </div>
                 </div>
@@ -77,7 +123,11 @@ Login
                         </p>
                     </div>
                     <div class="col-6">
+                        {% if bandera %}
+                        <input type="number" name="minutos" value="{{minutos}}" placeholder="20 Minutos">
+                        {% else %}
                         <input type="number" name="minutos" placeholder="20 Minutos">
+                        {% endif %}
                     </div>
                 </div>
 

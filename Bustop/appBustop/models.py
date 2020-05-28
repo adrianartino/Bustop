@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 # Create your models here.
 class Usuarios(models.Model):
@@ -9,6 +10,9 @@ class Usuarios(models.Model):
     localidad = models.CharField(max_length=255)
     correo = models.CharField(max_length=255)
     nacimiento = models.DateField()
+
+    def obtener_agno(self):
+        return self.nacimiento.year
 
 
 class Rutas(models.Model):

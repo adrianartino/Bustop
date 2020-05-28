@@ -12,7 +12,8 @@ Login
 
 {% block content %}
 <center>
-    <p style="font-family: 'Marvel', sans-serif; font-size: 70px;">MAPA DE RUTAS DE GÓMEZ PALACIO</p>
+    <p class="animate__animated animate__bounceInDown" style="font-family: 'Marvel', sans-serif; font-size: 70px;">MAPA
+        DE RUTAS DE GÓMEZ PALACIO</p>
 
      <div class="row">
 
@@ -23,7 +24,9 @@ Login
                  <ul class="list-group">
                      {% for i in rutasGomez %}
                      <li class="list-group-item">
-                         <a href="{{i.nombre_ruta}}">{{i.nombre_ruta}}.</a>
+                         <form action="/infoRuta/" method="post">{% csrf_token %}
+                             <button type="submit" name="nomreRuta" value="{{i.nombre_ruta}}">{{i.nombre_ruta}}</button>
+                         </form>
                      </li>
                      {% endfor %}
                  </ul>

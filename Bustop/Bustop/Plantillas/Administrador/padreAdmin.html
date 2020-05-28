@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
     <link href="signin.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Marvel:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
 
     <title>
         {% block tittle %}
@@ -45,25 +46,70 @@
                 </center>
             </div>
             <div class="list-group list-group-flush">
+                {% if principal %}
                 <a href="/principalAdmin/" id="b2" class="list-group-item list-group-item-action bg-light 
+        animated slideInUp " style="background-color: #f8b400!important;">
+                    <i style="color:white!important;" class="fa fa-home " id="icono1"></i> Página Principal</a>
+                {% else %}
+                <a href="/principalAdmin/"  id="b2" class="list-group-item list-group-item-action bg-light 
         animated slideInUp ">
                     <i class="fa fa-home " id="icono1"></i> Página Principal</a>
+                {% endif %}
+                
 
+                {% if alru %}
+                <a href="/altaRuta/" id="b2" class="list-group-item list-group-item-action bg-light 
+        animated slideInUp " style="background-color: #f8b400!important;">
+                    <i style="color:white!important;" class="fa fa-bus " id="icono1"></i> Dar de alta Ruta</a>
+                {% else %}
                 <a href="/altaRuta/" id="b2" class="list-group-item list-group-item-action bg-light 
         animated slideInUp ">
                     <i class="fa fa-bus " id="icono1"></i> Dar de alta Ruta</a>
+                {% endif %}
+                
 
+                {% if alco %}
+                <a href="/altaCons/" id="b3" class="list-group-item list-group-item-action bg-light
+        animated slideInUp " style="background-color: #f8b400!important;">
+                    <i style="color:white!important;" class="fas fa-user-plus" id="icono2"></i> Dar de alta
+                    Consesionario</a>
+                {% else %}
                 <a href="/altaCons/" id="b3" class="list-group-item list-group-item-action bg-light
         animated slideInUp ">
                     <i class="fas fa-user-plus" id="icono2"></i> Dar de alta Consesionario</a>
+                {% endif %}
+                
 
+                {% if baru %}
+                <a href="/bajaRuta/" id="b3" class="list-group-item list-group-item-action bg-light
+        animated slideInUp " style="background-color: #f8b400!important;">
+                    <i style="color:white!important;" class="fas fa-minus" id="icono2"></i> Dar de baja Ruta</a>
+                {% else %}
                 <a href="/bajaRuta/" id="b3" class="list-group-item list-group-item-action bg-light
         animated slideInUp ">
                     <i class="fas fa-minus" id="icono2"></i> Dar de baja Ruta</a>
+                {% endif %}
 
+                {% if baco %}
+                <a href="/bajaCons/" id="b3" class="list-group-item list-group-item-action bg-light
+        animated slideInUp " style="background-color: #f8b400!important;">
+                    <i style="color:white!important;" class="fas fa-user-times " id="icono2"></i> Dar de baja
+                    Consesionario</a>
+                {% else %}
                 <a href="/bajaCons/" id="b3" class="list-group-item list-group-item-action bg-light
         animated slideInUp ">
                     <i class="fas fa-user-times " id="icono2"></i> Dar de baja Consesionario</a>
+                {% endif %}
+
+                {% if usuarios %}
+                <a href="/usuariosAdmin/" id="b3" class="list-group-item list-group-item-action bg-light
+        animated slideInUp " style="background-color: #f8b400!important;">
+                    <i style="color:white!important;" class="fas fa-user " id="icono2"></i> Ver usuarios</a>
+                {% else %}
+                <a href="/usuariosAdmin/" id="b3" class="list-group-item list-group-item-action bg-light
+        animated slideInUp ">
+                    <i class="fas fa-user " id="icono2"></i> Ver usuarios</a>
+                {% endif %}
 
             </div>
 
@@ -95,7 +141,7 @@
                         <li class="nav-item">
                             <a class="nav-link" style="color:white; font-family: 'Marvel', sans-serif; font-size: 18px;"
                                 href="/salirAdmin/" data-toggle="tooltip"
-                                data-placement="bottom" title="Escucha a Gustavo Cerati!">
+                                data-placement="bottom" title="Salir de Bustop!">
                                 <i class="fas fa-sign-out-alt" style="font-size:20px"></i> Salir</a>
                         </li>
 

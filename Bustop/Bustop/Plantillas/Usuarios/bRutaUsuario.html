@@ -13,7 +13,16 @@ Login
 {% block content %}
 <center>
     <div class="container">
-        <p style="font-family: 'Marvel', sans-serif; font-size: 70px;">Introduce la ruta que buscas!</p>
+        {% if encontro %}
+        <p  style="font-family: 'Marvel', sans-serif; font-size: 70px;">
+            Introduce la ruta que
+            buscas!</p>
+        {% else %}
+        <p class="animate__animated animate__bounceInDown" style="font-family: 'Marvel', sans-serif; font-size: 70px;">
+            Introduce la ruta que
+            buscas!</p>
+        {% endif %}
+        
 
         <form action="/buscarRuta/" method="post">{% csrf_token %}
             <div class="input-group">
@@ -35,7 +44,8 @@ Login
                 <p style="font-family: 'Oswald', sans-serif; font-size:125%!important;">Busqueda realizada:
                     {{busqueda}}</p>
 
-                <table class="table table-hover" style="font-family: 'Oswald', sans-serif; font-size:125%!important;">
+                <table class="table table-hover animate__animated animate__bounceIn"
+                    style="font-family: 'Oswald', sans-serif; font-size:125%!important;">
                     <thead>
                         <tr class="table-active">
                             <th scope="col">Nombre de la Ruta</th>
@@ -63,6 +73,17 @@ Login
                 <br>
         </div>
 
+        {% endif %}
+
+        {% if noencontro %}
+        <div class="container mt-4"  id="resultadobusqueda">
+            <h1 class="animate__animated animate__bounceIn"
+                style=" font-family: 'Marvel', sans-serif;  font-size:400%!important;">
+                No hay coincidencias con tu búsqueda!</h1>
+            <p style="font-family: 'Oswald', sans-serif; font-size:125%!important;">Busqueda realizada:
+                {{busqueda}}</p>
+            <br>
+        </div>
         {% endif %}
 
 
