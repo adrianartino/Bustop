@@ -8,16 +8,17 @@ from django.shortcuts import redirect
 from django.conf import settings
 from django.core.mail import send_mail
 
+#librería fecha
+from datetime import datetime
+
+#librería para busquedas en base de datos.
+from django.contrib.postgres.search import SearchQuery, SearchVector
+
 #importar modelos
 from appBustop.models import Usuarios, Rutas, QuejasUsuarios, Admin, Concesionario, rutasAgregadas, ConcAgregados, rutasBuscadas
 
-from datetime import datetime
 
-from django.contrib.postgres.search import SearchQuery, SearchVector
 
-usuarioNormalLoguqado = False
-adminLogueado = False
-consLogueado = False
 
 # Create your views here.
 
@@ -51,8 +52,6 @@ def login(request):
 
          #Si encuentra a una persona con ese usuario
          if datospersona :
-
-            
 
             for dato in datospersona:
                contrareal = dato.contrasena
