@@ -21,6 +21,7 @@ class Rutas(models.Model):
     ncamiones = models.IntegerField()
     color = models.CharField(max_length=255)
     tiempo = models.IntegerField()
+    imagen = models.ImageField(upload_to="imagenesRutas", null = True)
 
 class Admin(models.Model):
     nombre_admin = models.CharField(max_length=255, primary_key=True)

@@ -279,7 +279,7 @@ def olvido(request):
 
          send_mail(asunto, mensaje, email_remitente, email_destino)
 
-         return render(request, "Principal/olvidoContra.html", {"datospersona": datospersona, "busqueda": nombreusuario, "nombre": nombre, "apellido": apellido})
+         return render(request, "Principal/olvidoContra.html", {"datospersona": datospersona2, "busqueda": nombreusuario, "nombre": nombre, "apellido": apellido})
 
       else:
          error = "No se encontro el usuario."
@@ -345,8 +345,9 @@ def infoRuta(request):
       ncamiones = x.ncamiones
       color = x.color
       tiempo = x.tiempo
+      imagen = x.imagen
 
-   return render(request, "Usuarios/infoRuta.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido'] , "nombreRuta":nombreRuta, "localidad":localidad, "ncamiones":ncamiones, "color":color, "tiempo":tiempo})
+   return render(request, "Usuarios/infoRuta.html", {"nombreusuario": request.session['sesion'], "nombre": request.session['nombre'], "apellido": request.session['apellido'] , "nombreRuta":nombreRuta, "localidad":localidad, "ncamiones":ncamiones, "color":color, "tiempo":tiempo, "imagen":imagen})
 
 #BUSCAR RUTA POS UBICACIÓN.
 
@@ -487,6 +488,7 @@ def altaRuta(request):
       numeroCamiones = request.POST['numeroCamiones']
       localidad = request.POST['localidad']
       minutos = request.POST['minutos']
+      imagen2 = request.FILES.get('imgruta')
 
       color = ""
 
@@ -529,7 +531,7 @@ def altaRuta(request):
 
       bandera2 = True
       registroRuta = Rutas(nombre_ruta=nombreRuta, localidad=localidad,
-                           ncamiones=numeroCamiones, color=color, tiempo=minutos)
+                           ncamiones=numeroCamiones, color=color, tiempo=minutos, imagen=imagen2)
       registroRuta.save()
 
       registroAdmin = rutasAgregadas(
@@ -762,7 +764,7 @@ def usuariosAdmin(request):
 
    listaUsuarios = Usuarios.objects.all()
 
-   return render(request, "Administrador/usuariosAdmin.html", {"usuarios":usuarios, "listaUsuarios":listaUsuarios, })
+   return render(request, "Administrador/usuariosAdmin.html", {"nombreusuario": request.session['admin'], "usuarios": usuarios, "listaUsuarios": listaUsuarios, })
 
 
 #Opens up page as PDF
@@ -793,9 +795,14 @@ def verPdf(request):
       n = queja.unidad
 
       if numQuejas >= 2:
-         for x in unidades:
-            if n != x:
-               unidades.append(n)
+         if n in unidades:
+            esta = True
+         
+         else:
+            esta = False
+
+         if esta == False:
+            unidades.append(n)
 
       elif numQuejas == 1:
          unidades.append(n)
@@ -1042,7 +1049,7 @@ def verPdf(request):
 
          data3.append([f1, f2, f3, f4])
          high = high - 18
-         contalt31 += 20
+         contaalt31 += 20
 
       elif contalt3 == 1 or contalt3 == 2:
          f1 = Paragraph(queja.usuario, see)
@@ -1065,18 +1072,18 @@ def verPdf(request):
    table3.wrapOn(c, width, height)
    table3.drawOn(c, 60, high)
 
-   
+   coco = high - 30
 
    color = "black"
    c.setFillColor(color)
    c.setFont('Helvetica', 12)
-   c.drawString(50, contaalt31, 'Observaciones:')
-   c.line(150, contaalt31, 550, contaalt31)
-   c.line(50, contaalt31-20, 550, contaalt31-20)
-   c.line(50, contaalt31-40, 550, contaalt31-40)
-   c.line(50, contaalt31-60, 550, contaalt31-60)
+   c.drawString(50, coco, 'Observaciones:')
+   c.line(150, coco, 550, coco)
+   c.line(50, coco-20, 550, coco-20)
+   c.line(50, coco-40, 550, coco-40)
+   c.line(50, coco-60, 550, coco-60)
 
-   alturaNueva4 = contaalt31-120
+   alturaNueva4 = coco-120
    c.setFont('Helvetica', 12)
    c.drawString(200, alturaNueva4, 'NOMBRE Y FIRMA DE CONCESIONARIO:')
    c.line(160, alturaNueva4-25, 460, alturaNueva4-25)
@@ -1329,6 +1336,180 @@ def verPdfBusquedas(request):
    alturaNueva4 = alturaNueva-120
    c.setFont('Helvetica', 12)
    c.drawString(200, alturaNueva4, 'NOMBRE Y FIRMA DE CONCESIONARIO:')
+   c.line(160, alturaNueva4-25, 460, alturaNueva4-25)
+
+   c.showPage()
+   c.save()
+
+   pdf = buffer.getvalue()
+   buffer.close()
+   response.write(pdf)
+   return response
+
+
+
+
+
+
+
+
+
+
+def verPdfUsuarios(request):
+
+   listaUsuarios = Usuarios.objects.all()
+
+   nombre = request.session['admin']
+
+   numUsuarios = 0
+
+   for x in listaUsuarios:
+      numUsuarios+=1
+
+   #pdf
+   response = HttpResponse(content_type='application/pdf')
+   response['Content-Disposition'] = 'attachment; filename= Lista de Usuarios Bustop.pdf'
+
+   buffer = BytesIO()
+   c = canvas.Canvas(buffer, pagesize=letter)
+
+   # HEADER
+   color = "#F3B416"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 22)
+   c.drawString(270, 740, 'Bustop')
+
+   color = "black"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 12)
+   c.drawString(230, 725, 'Te llevamos a donde quieras.')
+
+   hoy = datetime.now()
+
+   fecha = str(hoy.date())
+
+   c.setFont('Helvetica-Bold', 12)
+   c.drawString(480, 740, fecha)
+
+   c.line(460, 737, 560, 737)
+
+   #TITULO
+   color = "#0A7D91"
+   c.setFillColor(color)
+   c.setStrokeColor(color)
+   c.setFont('Helvetica', 24)
+   c.drawString(125, 680, 'REPORTE DE LISTA DE USUARIOS')
+
+   #DATOS CONCESIONARIO
+   color = "black"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 20)
+   c.drawString(200, 640, 'DATOS DE USUARIOS.')
+
+   c.setFont('Helvetica', 12)
+   c.drawString(50, 610, 'Nombre del Administrador:')
+   color = "#91140A"
+   c.setFillColor(color)
+   c.drawString(210, 610, nombre)
+   color = "black"
+   c.setFillColor(color)
+   c.line(200, 605, 310, 605)
+
+   color = "black"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 12)
+   c.drawString(340, 610, 'Número de usuarios:')
+   color = "#91140A"
+   c.setFillColor(color)
+   c.drawString(480, 610, str(numUsuarios))
+   color = "black"
+   c.setFillColor(color)
+   c.line(475, 605, 500, 605)
+   #DATOS DE LA RUTA
+   c.setFont('Helvetica', 20)
+   c.drawString(200, 565, 'LISTA DE USUARIOS EN BUSTOP.')
+
+   styles = getSampleStyleSheet()
+   styleBH = styles["Normal"]
+   styleBH.alignment = TA_CENTER
+   styleBH.fontSize = 12
+
+   #columnas
+   d1 = Paragraph('''Nombre de Usuario''', styleBH)
+   d2 = Paragraph('''Nombre''', styleBH)
+   d3 = Paragraph('''Apellido''', styleBH)
+   d4 = Paragraph('''Localidad''', styleBH)
+   d5 = Paragraph('''Correo''', styleBH)
+   d6 = Paragraph('''Fecha de Nac.''', styleBH)
+
+   #lista de datos
+   data = []
+
+   data.append([d1, d2, d3, d4, d5, d6])
+
+   #filas
+   styles = getSampleStyleSheet()
+   styleN = styles["Normal"]
+   styleN.alignment = TA_CENTER
+   styleN.fontSize = 7
+
+   width, height = letter
+
+   high = 490
+   co = 0
+   co2 = 0
+   for t in listaUsuarios:
+      co +=1
+
+      if co >= 2:
+         t1 = Paragraph(t.usuario, styleBH)
+         t2 = Paragraph(t.nombre, styleBH)
+         t3 = Paragraph(t.apellido, styleBH)
+         t4 = Paragraph(t.localidad, styleBH)
+         t5 = Paragraph(t.correo, styleBH)
+         t6 = Paragraph(str(t.nacimiento), styleBH)
+         data.append([t1, t2, t3, t4, t5, t6])
+         high = high - 18
+         co2 += 18
+
+      elif co == 1:
+         t1 = Paragraph(t.usuario, styleBH)
+         t2 = Paragraph(t.nombre, styleBH)
+         t3 = Paragraph(t.apellido, styleBH)
+         t4 = Paragraph(t.localidad, styleBH)
+         t5 = Paragraph(t.correo, styleBH)
+         t6 = Paragraph(str(t.nacimiento), styleBH)
+         data.append([t1, t2, t3, t4, t5, t6])
+         high = high - 18
+
+   #escribir la tabla.
+   width, height = letter  # tamaño de la hoja
+   table = Table(data, colWidths=[3*cm, 2.5*cm,
+                                  2.5*cm, 2.5*cm, 5*cm, 4*cm])
+   table.setStyle(TableStyle([
+       ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+       ('BOX', (0, 0), (-1, -1), 0.25, colors.black), ]))
+
+   table.wrapOn(c, width, height)
+   table.drawOn(c, 40, high)
+
+   if co >= 2:
+      alturaNueva = 420 + co2
+   elif co == 1:
+      alturaNueva = 420
+
+   color = "black"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 12)
+   c.drawString(50, alturaNueva, 'Observaciones:')
+   c.line(150, alturaNueva, 550, alturaNueva)
+   c.line(50, alturaNueva-20, 550, alturaNueva-20)
+   c.line(50, alturaNueva-40, 550, alturaNueva-40)
+   c.line(50, alturaNueva-60, 550, alturaNueva-60)
+
+   alturaNueva4 = alturaNueva-120
+   c.setFont('Helvetica', 12)
+   c.drawString(200, alturaNueva4, 'NOMBRE Y FIRMA DE ADMINISTRADOR:')
    c.line(160, alturaNueva4-25, 460, alturaNueva4-25)
 
    c.showPage()

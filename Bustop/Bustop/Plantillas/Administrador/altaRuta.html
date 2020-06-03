@@ -15,7 +15,7 @@ Login
     <p class="animate__animated animate__bounceInDown" style="font-family: 'Marvel', sans-serif; font-size: 70px;">Dar
         de alta ruta.</p>
 
-    <form action="/altaRuta/" method="post">{% csrf_token %}
+    <form action="/altaRuta/" method="post" enctype="multipart/form-data">{% csrf_token %}
         <div class="row">
 
             <div class="col-6">
@@ -105,15 +105,7 @@ Login
                     </div>
                     <div class="col-6">
 
-                        <div class="image-upload">
-                            <label for="file-input">
-                                <img src="http://files.softicons.com/download/toolbar-icons/mono-general-icons-3-by-custom-icon-design/png/256x256/camera.png"
-                                    alt="Click aquí para subir tu foto" title="Click aquí para subir tu foto"
-                                    data-toggle="tooltip" data-placement="bottom" title="Clic aquí para subir la foto!"
-                                    style="width: 15%;">
-                                <input id="file-input" name="foto" type="file">
-                            </label>
-                        </div>
+                        <input type="file" name="imgruta" id="txtimagen">
                     </div>
                 </div>
                 <br>

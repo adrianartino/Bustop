@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from appBustop import views
+
+from django.conf import settings
+from django.conf.urls.static import static
 # login, registro, olvido, principalUsuario, buscarRuta, ubicacionRuta, mapaRutaGomez, mapaRutaTorreon, mapaRutaLerdo, quejaUsuario, principalCons, infoCons, quejasCons, usuariosCons, principalAdmin, altaRuta, altaCons, actCons, actUsuario
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -46,5 +49,9 @@ urlpatterns = [
     path('infoRuta/', views.infoRuta),
     path('usuariosAdmin/', views.usuariosAdmin),
     path('verPdf/', views.verPdf),
-    path('verPdfBusquedas/', views.verPdfBusquedas)
+    path('verPdfBusquedas/', views.verPdfBusquedas),
+    path('verPdfUsuarios/', views.verPdfUsuarios)
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

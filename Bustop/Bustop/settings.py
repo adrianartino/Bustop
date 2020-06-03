@@ -133,3 +133,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "bustopconnection@gmail.com"
 EMAIL_HOST_PASSWORD = "bustop1723"
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
