@@ -11,6 +11,17 @@ from django.core.mail import send_mail
 #librería fecha
 from datetime import datetime
 
+#libreria pdf
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.units import cm
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Paragraph, Table, TableStyle, Image
+from reportlab.lib.enums import TA_CENTER
+from reportlab.lib import colors
+from reportlab.lib.utils import ImageReader
+
 #librería para busquedas en base de datos.
 from django.contrib.postgres.search import SearchQuery, SearchVector
 
@@ -230,6 +241,7 @@ def olvido(request):
       nombreusuario = request.POST['nombreusuario']
 
       datospersona = Usuarios.objects.filter(usuario__icontains=nombreusuario)
+      datospersona2 = Usuarios.objects.filter(correo__icontains=nombreusuario)
 
       if datospersona:
 
@@ -248,6 +260,26 @@ def olvido(request):
          send_mail(asunto, mensaje, email_remitente, email_destino)
 
          return render(request, "Principal/olvidoContra.html", {"datospersona":datospersona,"busqueda":nombreusuario, "nombre":nombre, "apellido":apellido})
+      
+      elif datospersona2:
+
+         for dato in datospersona2:
+            nombre = dato.nombre
+            apellido = dato.apellido
+            correo = dato.correo
+            contraseña = dato.contrasena
+
+         email_remitente = settings.EMAIL_HOST_USER
+         email_destino = [correo]
+
+         asunto = "Recuperación de contraseña - Bustop"
+         mensaje = "Hola " + nombre + " " + apellido + \
+             "!. Creemos que olvidaste tu contraseña :(. Tu contraseña es: " + \
+             contraseña + "."
+
+         send_mail(asunto, mensaje, email_remitente, email_destino)
+
+         return render(request, "Principal/olvidoContra.html", {"datospersona": datospersona, "busqueda": nombreusuario, "nombre": nombre, "apellido": apellido})
 
       else:
          error = "No se encontro el usuario."
@@ -541,6 +573,14 @@ def altaCons(request):
       registroCons = Concesionario(conce=usuarioCons, contrasena=contraCons, nombre_conce=nombreCons, nombre_ruta=rutaCons, correo=correoCons)
       registroCons.save()
 
+      email_remitente = settings.EMAIL_HOST_USER
+      email_destino = [correoCons]
+         
+      asunto = "Bienvenido a Bustop!"
+      mensaje = "Hola "+ nombreCons+" !. Te damos la bienvenida a Bustop! Tu nombre de usuario es: "+ usuarioCons+ ". Tu contraseña es: " + contraCons + " ."
+
+      send_mail(asunto, mensaje, email_remitente, email_destino)
+
       registroAdmin = ConcAgregados(
           conce=usuarioCons, nombre_admin=request.session['admin'])
       registroAdmin.save()
@@ -685,11 +725,10 @@ def actCons(request):
           nombre_conce=nombreCons, nombre_ruta=rutaCons, correo=correoCons)
 
       actualizado = True
-
       request.session['nombreconce'] = nombreCons
 
       datosCons = Concesionario.objects.filter(
-          conce__icontains=request.session['conce'])
+            conce__icontains=request.session['conce'])
 
       rutas = Rutas.objects.all()
 
@@ -724,3 +763,578 @@ def usuariosAdmin(request):
    listaUsuarios = Usuarios.objects.all()
 
    return render(request, "Administrador/usuariosAdmin.html", {"usuarios":usuarios, "listaUsuarios":listaUsuarios, })
+
+
+#Opens up page as PDF
+def verPdf(request):
+
+   #Sacar todos los datos del conc, su ruta y sus quejas
+   datosCons = Concesionario.objects.filter(
+       conce__icontains=request.session['conce'])
+
+   for d in datosCons:
+      nombre = d.nombre_conce
+      rutaEncargada = d.nombre_ruta
+
+   #Sacar datos de la ruta de la que esta encargado el concesionario
+   infoRuta = Rutas.objects.filter(nombre_ruta__icontains=rutaEncargada)
+
+
+   #Sacar todas las quejas de esa ruta
+   quejasRuta = QuejasUsuarios.objects.filter(
+       nombre_ruta__icontains=rutaEncargada)
+
+   numQuejas = 0
+
+   unidades = []
+   
+   for queja in quejasRuta:
+      numQuejas += 1
+      n = queja.unidad
+
+      if numQuejas >= 2:
+         for x in unidades:
+            if n != x:
+               unidades.append(n)
+
+      elif numQuejas == 1:
+         unidades.append(n)
+
+   cont = 0
+   vecesQuejas = []
+
+   for u in unidades:
+      for o in quejasRuta:
+         if o.unidad == u:
+            cont += 1
+      vecesQuejas.append(cont)
+      cont = 0
+
+
+   
+
+
+   #pdf
+   response = HttpResponse(content_type='application/pdf')
+   response['Content-Disposition'] = 'attachment; filename= Reporte Quejas de Usuarios.pdf'
+
+   buffer = BytesIO()
+   c = canvas.Canvas(buffer, pagesize=letter)
+
+   # HEADER
+   color = "#F3B416"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 22)
+   c.drawString(270,740,'Bustop')
+
+   color = "black"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 12)
+   c.drawString(230, 725, 'Te llevamos a donde quieras.')
+
+   hoy = datetime.now()
+
+   fecha = str(hoy.date())
+
+   c.setFont('Helvetica-Bold', 12)
+   c.drawString(480, 740, fecha)
+
+   c.line(460,737,560,737)
+
+   #TITULO
+   color = "#0A7D91"
+   c.setFillColor(color)
+   c.setStrokeColor(color)
+   c.setFont('Helvetica', 24)
+   c.drawString(85, 680, 'REPORTE DE QUEJAS DE USUARIOS')
+
+   #DATOS CONCESIONARIO
+   color = "black"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 20)
+   c.drawString(200, 640, 'DATOS CONCESIONARIO.')
+
+   c.setFont('Helvetica', 12)
+   c.drawString(50, 610, 'Nombre del Concesionario:')
+   color = "#91140A"
+   c.setFillColor(color)
+   c.drawString(210, 610, nombre)
+   color = "black"
+   c.setFillColor(color)
+   c.line(200,605,310,605)
+
+   color = "black"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 12)
+   c.drawString(340, 610, 'Ruta a cargo:')
+   color = "#91140A"
+   c.setFillColor(color)
+   c.drawString(440, 610, rutaEncargada)
+   color = "black"
+   c.setFillColor(color)
+   c.line(430, 605, 510, 605)
+
+
+   #DATOS DE LA RUTA 
+   c.setFont('Helvetica', 20)
+   c.drawString(200, 565, 'INFORMACIÓN DE RUTA.')
+
+   styles = getSampleStyleSheet()
+   styleBH = styles["Normal"]
+   styleBH.alignment = TA_CENTER
+   styleBH.fontSize = 12
+
+   #columnas
+   d1 = Paragraph('''Ruta''', styleBH)
+   d2 = Paragraph('''Localidad''', styleBH)
+   d3 = Paragraph('''N° Camiones''', styleBH)
+   d4 = Paragraph('''Color''', styleBH)
+   d5 = Paragraph('''Tiempo''', styleBH)
+   d6 = Paragraph('''N° Quejas''', styleBH)
+
+   #lista de datos
+   data = []
+
+   data.append([d1, d2, d3, d4, d5, d6])
+
+   #filas
+   styles = getSampleStyleSheet()
+   styleN = styles["Normal"]
+   styleN.alignment = TA_CENTER
+   styleN.fontSize = 7
+
+   width, height = letter
+
+   high = 530
+
+   for t in infoRuta:
+      t1 = Paragraph(t.nombre_ruta, styleBH)
+      t2 = Paragraph(t.localidad, styleBH)
+      t3 = Paragraph(str(t.ncamiones), styleBH)
+      t4 = Paragraph(t.color, styleBH)
+      t5 = Paragraph(str(t.tiempo), styleBH)
+      t6 = Paragraph(str(numQuejas), styleBH)
+      
+      #rutita = [t1, t.localidad, t.ncamiones, t.color, t.tiempo, numQuejas]
+      # data.append(rutita)
+      data.append([t1, t2, t3, t4, t5, t6])
+      high = high - 18
+
+   #escribir la tabla.
+   width, height = letter  # tamaño de la hoja
+   table = Table(data, colWidths=[3.2*cm, 3.2*cm,
+                                  3.2*cm, 3*cm, 2*cm, 2.5*cm])
+   table.setStyle(TableStyle([
+      ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
+      ('BOX', (0,0), (-1,-1), 0.25, colors.black),]))
+
+   table.wrapOn(c, width,height)
+   table.drawOn(c,60, high)
+
+#TABLA DE QUEJAS POR UNIDAD.
+   color = "#91140A"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 20)
+   c.drawString(150, 470, 'NÚMERO DE QUEJAS POR UNIDAD.')
+
+   styles = getSampleStyleSheet()
+   ss = styles["Normal"]
+   ss.alignment = TA_CENTER
+   ss.fontSize = 12
+
+   #columnas
+   r1 = Paragraph('''NÚMERO DE UNIDAD''', ss)
+   r2 = Paragraph('''NÚMERO DE QUEJAS''', ss)
+
+   #lista de datos
+   data2 = []
+
+   data2.append([r1, r2])
+
+   width, height = letter
+
+   high = 430
+
+   conthigh = 0
+   conthigh2 = 0
+
+   for unidad, quejas in zip(unidades, vecesQuejas):
+      conthigh += 1 
+
+      if conthigh >= 2:
+         un = Paragraph(str(unidad), ss)
+         qu = Paragraph(str(quejas), ss)
+
+         data2.append([un, qu])
+         high = high - 18
+         conthigh2 += 18
+
+      elif conthigh == 1:
+         un = Paragraph(str(unidad), ss)
+         qu = Paragraph(str(quejas), ss)
+
+         data2.append([un, qu])
+         high = high - 18
+
+   #escribir la tabla.
+   width, height = letter  # tamaño de la hoja
+   table2 = Table(data2, colWidths=[5*cm, 5*cm])
+   table2.setStyle(TableStyle([
+       ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+       ('BOX', (0, 0), (-1, -1), 0.25, colors.black), ]))
+
+   table2.wrapOn(c, width, height)
+   table2.drawOn(c, 180, high)
+
+
+   alturaNueva = 370 - conthigh2
+
+
+   #TABLA DE QUEJAS .
+   color = "#91140A"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 20)
+   if conthigh == 1:
+      c.drawString(190, 370, 'QUEJAS Y SUGERENCIAS.')
+   elif conthigh >= 2:
+      c.drawString(190, alturaNueva, 'QUEJAS Y SUGERENCIAS.')
+
+   
+
+   styles = getSampleStyleSheet()
+   see = styles["Normal"]
+   see.alignment = TA_CENTER
+   see.fontSize = 12
+
+         #columnas
+   r1 = Paragraph('''USUARIO''', see)
+   r2 = Paragraph('''UNIDAD''', see)
+   r3 = Paragraph('''FECHA''', see)
+   r4 = Paragraph('''TEXTO''', see)
+
+         #lista de datos
+   data3 = []
+
+   data3.append([r1, r2, r3, r4])
+
+   width, height = letter
+
+   if conthigh == 1:
+      high = 330
+   elif conthigh >= 2:
+      alturaNueva2 = 330 - conthigh2
+      high = alturaNueva2
+   
+
+   cont2 = 0
+
+   contalt3 = 0
+   contaalt31 = 240
+
+   for queja in quejasRuta:
+      contalt3 += 1
+
+      if contalt3 >= 3:
+         f1 = Paragraph(queja.usuario, see)
+         f2 = Paragraph(str(queja.unidad), see)
+         f3 = Paragraph(str(queja.fecha), see)
+         f4 = Paragraph(queja.texto, see)
+
+         data3.append([f1, f2, f3, f4])
+         high = high - 18
+         contalt31 += 20
+
+      elif contalt3 == 1 or contalt3 == 2:
+         f1 = Paragraph(queja.usuario, see)
+         f2 = Paragraph(str(queja.unidad), see)
+         f3 = Paragraph(str(queja.fecha), see)
+         f4 = Paragraph(queja.texto, see)
+
+         data3.append([f1, f2, f3, f4])
+         high = high - 18
+
+         contaalt31 = 240
+
+         #escribir la tabla.
+   width, height = letter  # tamaño de la hoja
+   table3 = Table(data3, colWidths=[3*cm, 3*cm, 3*cm, 8.5*cm, ])
+   table3.setStyle(TableStyle([
+      ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+      ('BOX', (0, 0), (-1, -1), 0.25, colors.red), ]))
+
+   table3.wrapOn(c, width, height)
+   table3.drawOn(c, 60, high)
+
+   
+
+   color = "black"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 12)
+   c.drawString(50, contaalt31, 'Observaciones:')
+   c.line(150, contaalt31, 550, contaalt31)
+   c.line(50, contaalt31-20, 550, contaalt31-20)
+   c.line(50, contaalt31-40, 550, contaalt31-40)
+   c.line(50, contaalt31-60, 550, contaalt31-60)
+
+   alturaNueva4 = contaalt31-120
+   c.setFont('Helvetica', 12)
+   c.drawString(200, alturaNueva4, 'NOMBRE Y FIRMA DE CONCESIONARIO:')
+   c.line(160, alturaNueva4-25, 460, alturaNueva4-25)
+
+
+
+   c.showPage()
+   c.save()
+
+   pdf = buffer.getvalue()
+   buffer.close()
+   response.write(pdf)
+   return response
+
+
+
+
+def verPdfBusquedas(request):
+
+   #Sacar todos los datos del conc, su ruta y sus quejas
+   datosCons = Concesionario.objects.filter(
+       conce__icontains=request.session['conce'])
+
+   for d in datosCons:
+      nombre = d.nombre_conce
+      rutaEncargada = d.nombre_ruta
+
+   #Sacar datos de la ruta de la que esta encargado el concesionario
+   infoRuta = Rutas.objects.filter(nombre_ruta__icontains=rutaEncargada)
+
+   #Sacar todas las quejas de esa ruta
+   busquedas = rutasBuscadas.objects.filter(
+       nombre_ruta__icontains=rutaEncargada)
+   
+   numeroDeBusquedas = 0
+
+   for ya in busquedas:
+      numeroDeBusquedas += 1
+   
+   todasBusquedas = rutasBuscadas.objects.all()
+
+   numBusquedas = 0
+
+   rutasbuscadas = []
+
+   for bu in todasBusquedas:
+      numBusquedas += 1
+      n = bu.nombre_ruta
+
+      if numBusquedas >= 2:
+         if n in rutasbuscadas:
+            siesta= True
+         else: 
+            rutasbuscadas.append(n)
+      elif numBusquedas == 1:
+         rutasbuscadas.append(n)
+
+   cont = 0
+   vecesBusquedas = []
+
+   for u in rutasbuscadas:
+      for o in todasBusquedas:
+         if o.nombre_ruta == u:
+            cont += 1
+      vecesBusquedas.append(cont)
+      cont = 0
+
+   #pdf
+   response = HttpResponse(content_type='application/pdf')
+   response['Content-Disposition'] = 'attachment; filename= Reporte Busqueda Usuarios.pdf'
+
+   buffer = BytesIO()
+   c = canvas.Canvas(buffer, pagesize=letter)
+
+   # HEADER
+   color = "#F3B416"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 22)
+   c.drawString(270, 740, 'Bustop')
+
+   color = "black"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 12)
+   c.drawString(230, 725, 'Te llevamos a donde quieras.')
+
+   hoy = datetime.now()
+
+   fecha = str(hoy.date())
+
+   c.setFont('Helvetica-Bold', 12)
+   c.drawString(480, 740, fecha)
+
+   c.line(460, 737, 560, 737)
+
+   #TITULO
+   color = "#0A7D91"
+   c.setFillColor(color)
+   c.setStrokeColor(color)
+   c.setFont('Helvetica', 24)
+   c.drawString(125, 680, 'REPORTE DE USUARIOS EN RUTA')
+
+   #DATOS CONCESIONARIO
+   color = "black"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 20)
+   c.drawString(200, 640, 'DATOS CONCESIONARIO.')
+
+   c.setFont('Helvetica', 12)
+   c.drawString(50, 610, 'Nombre del Concesionario:')
+   color = "#91140A"
+   c.setFillColor(color)
+   c.drawString(210, 610, nombre)
+   color = "black"
+   c.setFillColor(color)
+   c.line(200, 605, 310, 605)
+
+   color = "black"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 12)
+   c.drawString(340, 610, 'Ruta a cargo:')
+   color = "#91140A"
+   c.setFillColor(color)
+   c.drawString(440, 610, rutaEncargada)
+   color = "black"
+   c.setFillColor(color)
+   c.line(430, 605, 510, 605)
+   #DATOS DE LA RUTA
+   c.setFont('Helvetica', 20)
+   c.drawString(200, 565, 'INFORMACIÓN DE RUTA.')
+
+   styles = getSampleStyleSheet()
+   styleBH = styles["Normal"]
+   styleBH.alignment = TA_CENTER
+   styleBH.fontSize = 12
+
+   #columnas
+   d1 = Paragraph('''Ruta''', styleBH)
+   d2 = Paragraph('''Localidad''', styleBH)
+   d3 = Paragraph('''N° Camiones''', styleBH)
+   d4 = Paragraph('''Color''', styleBH)
+   d5 = Paragraph('''Tiempo''', styleBH)
+   d6 = Paragraph('''N° Búsquedas''', styleBH)
+
+   #lista de datos
+   data = []
+
+   data.append([d1, d2, d3, d4, d5, d6])
+
+   #filas
+   styles = getSampleStyleSheet()
+   styleN = styles["Normal"]
+   styleN.alignment = TA_CENTER
+   styleN.fontSize = 7
+
+   width, height = letter
+
+   high = 530
+
+   for t in infoRuta:
+      t1 = Paragraph(t.nombre_ruta, styleBH)
+      t2 = Paragraph(t.localidad, styleBH)
+      t3 = Paragraph(str(t.ncamiones), styleBH)
+      t4 = Paragraph(t.color, styleBH)
+      t5 = Paragraph(str(t.tiempo), styleBH)
+      t6 = Paragraph(str(numeroDeBusquedas), styleBH)
+
+      #rutita = [t1, t.localidad, t.ncamiones, t.color, t.tiempo, numQuejas]
+      # data.append(rutita)
+      data.append([t1, t2, t3, t4, t5, t6])
+      high = high - 18
+
+   #escribir la tabla.
+   width, height = letter  # tamaño de la hoja
+   table = Table(data, colWidths=[3.2*cm, 3.2*cm,
+                                  3.2*cm, 3*cm, 2*cm, 2.5*cm])
+   table.setStyle(TableStyle([
+       ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+       ('BOX', (0, 0), (-1, -1), 0.25, colors.black), ]))
+
+   table.wrapOn(c, width, height)
+   table.drawOn(c, 60, high)
+
+#TABLA DE QUEJAS POR UNIDAD.
+   color = "#91140A"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 20)
+   c.drawString(150, 470, 'TABLA COMPARATIVA CON OTRAS RUTAS.')
+
+   styles = getSampleStyleSheet()
+   ss = styles["Normal"]
+   ss.alignment = TA_CENTER
+   ss.fontSize = 12
+
+   #columnas
+   r1 = Paragraph('''NOMBRE DE RUTA''', ss)
+   r2 = Paragraph('''NÚMERO DE BÚSQUEDAS''', ss)
+
+   #lista de datos
+   data2 = []
+
+   data2.append([r1, r2])
+
+   width, height = letter
+
+   high = 430
+
+   conthigh = 0
+   conthigh2 = 0
+
+   for ruta, bus in zip(rutasbuscadas, vecesBusquedas):
+      conthigh += 1
+
+      if conthigh >= 2:
+         un = Paragraph(str(ruta), ss)
+         qu = Paragraph(str(bus), ss)
+
+         data2.append([un, qu])
+         high = high - 18
+         conthigh2 += 18
+
+      elif conthigh == 1:
+         un = Paragraph(str(ruta), ss)
+         qu = Paragraph(str(bus), ss)
+
+         data2.append([un, qu])
+         high = high - 18
+
+   #escribir la tabla.
+   width, height = letter  # tamaño de la hoja
+   table2 = Table(data2, colWidths=[5*cm, 5*cm])
+   table2.setStyle(TableStyle([
+       ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+       ('BOX', (0, 0), (-1, -1), 0.25, colors.black), ]))
+
+   table2.wrapOn(c, width, height)
+   table2.drawOn(c, 180, high)
+
+   alturaNueva = 370 - conthigh2
+
+
+   color = "black"
+   c.setFillColor(color)
+   c.setFont('Helvetica', 12)
+   c.drawString(50, alturaNueva, 'Observaciones:')
+   c.line(150, alturaNueva, 550, alturaNueva)
+   c.line(50, alturaNueva-20, 550, alturaNueva-20)
+   c.line(50, alturaNueva-40, 550, alturaNueva-40)
+   c.line(50, alturaNueva-60, 550, alturaNueva-60)
+
+   alturaNueva4 = alturaNueva-120
+   c.setFont('Helvetica', 12)
+   c.drawString(200, alturaNueva4, 'NOMBRE Y FIRMA DE CONCESIONARIO:')
+   c.line(160, alturaNueva4-25, 460, alturaNueva4-25)
+
+   c.showPage()
+   c.save()
+
+   pdf = buffer.getvalue()
+   buffer.close()
+   response.write(pdf)
+   return response

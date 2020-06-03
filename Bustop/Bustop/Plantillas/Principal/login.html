@@ -30,21 +30,33 @@ Login
                     <div class="div">
                         
                         {% if bandera2 %}
-                        <input type="text" class="input" name="nombreusuario" value="{{nombreusuario}}"
-                            placeholder="Usuario" >
+                        <input type="text" class="juanito" name="nombreusuario" value="{{nombreusuario}}"
+                            placeholder="Usuario" required title="Ingresa tu nombre de usuario" style="color: white;"
+                            data-toggle="tooltip"
+                            data-placement="right">
                         {% else %}
-                        <input type="text" id = "inputculo" class="input" name="nombreusuario" placeholder="Usuario"
-                            >
+                        <input type="text"  class="juanito" name="nombreusuario" placeholder="Usuario"
+                            required title="Ingresa tu nombre de usuario" style="color: white;"
+                            data-toggle="tooltip"
+                            data-placement="right">
                         {% endif %}
+                        <style>
+                            ::placeholder { /* Firefox, Chrome, Opera */
+                            color: white;
+                            }
+                        </style>
                     </div>
                 </div>
+                
                 <div class="input-div pass">
                     <div class="i">
                         <i class="fas fa-lock"></i>
                     </div>
                     <div class="div">
                         <h5>Contraseña</h5>
-                        <input type="password" class="input" name="contrausuario">
+                        <input type="password" class="input" name="contrausuario" required
+                            title="Ingresa tu contraseña" data-toggle="tooltip"
+                            data-placement="right">
                     </div>
                 </div>
                 <a id="a3" href="/olvido/">Olvide la contraseña.</a>

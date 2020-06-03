@@ -45,4 +45,6 @@ urlpatterns = [
     path('salirCons/', views.salirCons),
     path('infoRuta/', views.infoRuta),
     path('usuariosAdmin/', views.usuariosAdmin),
+    path('verPdf/', views.verPdf),
+    path('verPdfBusquedas/', views.verPdfBusquedas)
 ]

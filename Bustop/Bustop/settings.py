@@ -77,11 +77,11 @@ WSGI_APPLICATION = 'Bustop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'rsjhzwer',
-        'USER': 'rsjhzwer',
-        'PASSWORD': 'Lgx85Lo1OMGfp4Pzm8gpZ1utg0cBwo5i',
-        'HOST': 'otto.db.elephantsql.com',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'bustopCo',
+        'USER': 'postgres',
+        'PASSWORD': 'marcos619',
+        'HOST': '127.0.0.1',
         'PORT': '5432'
     }
 }

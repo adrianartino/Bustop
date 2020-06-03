@@ -48,9 +48,13 @@ Login
     </div>
 
     <br>
-    <button class="btn btn-primary" id="menu-toggle" style="background-color: #f8b400 ; border: none;">Generar
-        Informe</button>
-    <br>
+    <form action="/verPdf/" method="post">{% csrf_token %}
+        <button type="submit" class="btn btn-primary" id="menu-toggle"
+            style="background-color: #f8b400 ; border: none;">Generar
+            Informe</button>
+    </form>
+    
+    <br> 
     <br>
 
 </center>

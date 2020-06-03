@@ -52,7 +52,7 @@ class ConcAgregados(models.Model):
 
 
 class QuejasUsuarios(models.Model):
-    usuario = models.CharField(max_length=255, primary_key=True)
+    usuario = models.CharField(max_length=255)
     unidad = models.IntegerField()
     nombre_ruta = models.CharField(max_length=255)
     fecha = models.DateField()
